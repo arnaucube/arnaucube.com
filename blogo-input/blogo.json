@@ -9,6 +9,17 @@
   "metaimg": "img/logoArnauCube.png",
   "posts": [
     {
+      "thumb": "ai-connections_thumb.md",
+      "md": "ai-connections.md",
+      "metadescr": "A short note on aiccelerationism, hyperreality, and the recovery of human connections.",
+      "metaimg": "img/posts/ai/two-worlds.jpg"
+    },
+    {
+      "thumb": "sonobe-talk_thumb.md",
+      "metadescr": "[zkSummit12 talk] Sonobe, a modular folding schemes library",
+      "outsideArticle": "https://www.youtube.com/watch?v=z3FH9I8klDk"
+    },
+    {
       "thumb": "protogalaxy_thumb.md",
       "md": "protogalaxy.md",
       "metadescr": "The idea of these notes is to provide some extra intuition and explainations on ProtoGalaxy's paper. ProtoGalaxy is a folding scheme which iterates on ideas from ProtoStar paper.",
