@@ -8,6 +8,12 @@
   "metadescr": "arnaucube blog",
   "metaimg": "img/logoArnauCube.png",
   "posts": [
+        {
+      "thumb": "hashsigs_thumb.md",
+      "metadescr": "This document contains notes on hash-based signatures (WOTS+, HORST, SPHINCS, XMSS)",
+      "outsideArticle": "https://raw.githubusercontent.com/arnaucube/math/master/notes_hash-based-signatures.pdf",
+      "date": "2025-12-27"
+    },
     {
       "thumb": "ai-connections_thumb.md",
       "md": "ai-connections.md",
