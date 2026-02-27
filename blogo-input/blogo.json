@@ -3,6 +3,7 @@
   "relativePath": "/blog",
   "absoluteUrl": "https://arnaucube.com/blog",
   "postsDir": "posts",
+  "outputDir": "blog",
   "indexTemplate": "index.html",
   "postThumbTemplate": "postThumbTemplate.html",
   "metadescr": "arnaucube blog",

@@ -1,0 +1,477 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>arnaucube</title>
+  <meta name="description" content="arnaucube, arnaucube software developer">
+  <meta name="keyword" content="arnaucube, arnaucode, arnau, cube, software, developer, portfolio, computer, science, electronics, telecomunications, engineer">
+  <link rel="icon" type="image/png" href="img/logoArnauCubeFavicon.png">
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1d3557;
+      --muted: #58708e;
+      --link: #4d9aa1;
+      --code: #4d9aa1;
+      --card: #ffffff;
+    }
+    body.dark-theme {
+      --bg: #0f0f10;
+      --text: #e9e9ea;
+      --muted: #a9a9ad;
+      --link: #4d9aa1;
+      --code: #4d9aa1;
+      --card: #0f0f10;
+    }
+    body {
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Avenir Next", "Montserrat", "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+      font-size:100%;
+      margin: 0;
+    }
+
+    a,
+    a:hover,
+    a:focus,
+    a:active {
+      color: var(--link);
+      text-decoration:none;
+    }
+    ul{
+      margin-top:0px;
+    }
+    li{
+      margin-top: 5px;
+    }
+    code {
+      font-size: 130%!important;
+      color: var(--code)!important;
+    }
+    .recentwork{
+      color: var(--link)!important;
+      text-decoration: underline;
+    }
+    .gray{
+      color: var(--muted);
+    }
+    h3 {
+      margin-bottom: 2px;
+    }
+    h4 {
+      margin-bottom: 2px;
+    }
+    .recent-work-box{
+      background: transparent;
+      border-radius: 0;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 10px;
+      margin: 10px;
+    }
+    .main {
+      margin: 0 auto;
+      max-width: 760px;
+      padding: 20px;
+    }
+    .theme-toggle {
+      /*position: sticky;*/
+      top: 12px;
+      float: right;
+      z-index: 2;
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--muted);
+      border-radius: 999px;
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
+      line-height: 1;
+      padding: 0;
+      cursor: pointer;
+    }
+    @media only screen and (min-width: 450px) {
+      .tresd{
+        z-index: -2;
+        position: absolute;
+        left:30%!important;
+        top:25%;
+      }
+    }
+    @media only screen and (max-width: 450px) {
+      .tresd{
+        z-index: -2;
+        position: absolute;
+        left:0%;
+        top:25%;
+      }
+    }
+
+      
+    * {
+      box-sizing: border-box;
+    }
+    .column {
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      float: none;
+    }
+    @media only screen and (max-width: 700px) {
+      .main {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main">
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">&#9728;</button>
+
+  <!-- <div id="tresd" style="z-index: -2; position: absolute; top:25%;"></div> -->
+  <!-- <div id="tresd" style="z-index: -2; position: absolute; left:0%;top:25%;"></div> -->
+  <div id="tresd" class="tresd"></div>
+
+  <div style="margin-top: 0;">
+    <div class="row">
+      <div class="column">
+
+    <div style="float:left;">
+        <img src="img/logoArnauCube_transparent.png" style="max-width: 100px;margin-top:30px;" \>
+      </div>
+      <br>
+      <div style="display:inline-block;max-width:500px; margin-left:10%;">
+      <!-- <div style="float:right; max-width:500px;"> -->
+      <p><b>arnaucube</b> - cryptography engineer</p>
+        <span  style="font-size:110%;">
+          <a href="/blog">blog</a>
+          <span style="margin: 10px;">|</span>
+          <a href="/blog/notes.html">notes</a>
+          <span style="margin: 10px;">|</span>
+          <a href="https://github.com/arnaucube" target="_blank">github</a>
+          <span style="font-style:italic;">(<a href="https://git.arnaucube.com/arnaucube?sort=moststars" target="_blank">git-mirror</a>)</span>
+          <span style="margin: 10px;">|</span>
+          <a href="https://twitter.com/arnaucube" target="_blank">twitter</a>
+        </span>
+      </div>
+
+      <br><br>
+      <div style="margin:30px;">
+        Some of the projects I've enjoyed working on over these past years:<br>
+        <ul>
+          <li>
+            <i>Folding schemes</i> implementations such as Nova, HyperNova, ProtoGalaxy, CycleFold in the
+        <a href="https://github.com/privacy-ethereum/sonobe" target="_blank">Sonobe</a> library
+          </li>
+          <li>
+            <i>Commitment schemes</i> such as
+        <a href="https://github.com/arnaucube/kzg-commitments-study" target="_blank">KZG10</a>,
+        <a href="https://github.com/arnaucube/fri-commitment" target="_blank">FRI</a>,
+        <a href="https://github.com/arnaucube/ipa-rs" target="_blank">IPA</a>
+          </li>
+          <li>
+            Elliptic curve <i>signature schemes</i> such as
+        <a href="https://github.com/arnaucube/ring-signatures-rs" target="_blank">bLSAG ring signatures</a>
+        and <a href="https://github.com/aragonzkresearch/ark-ec-blind-signatures" target="_blank">blind signatures</a>
+          </li>
+          <li>
+            other <i>cryptographic primitives</i> such as
+<a href="https://github.com/arnaucube/go-snark-study" target="_blank">go-snark</a> lib,
+<a href="https://github.com/vocdoni/arbo" target="_blank">arbo</a> (CPU-parallelized MerkleTree),
+            <a href="https://github.com/arnaucube/babyjubjub-rs" target="_blank">BabyJubJub</a> elliptic curve, <a href="https://github.com/arnaucube/poseidon-rs" target="_blank">Poseidon</a> hash
+          </li>
+          <li>
+            zk <i>circuits</i> such as <a
+          href="https://github.com/vocdoni/keccak256-circom"
+          target="_blank">keccak256-circom</a>,
+<a href="https://github.com/vocdoni/zk-franchise-proof-circuit/tree/9d25884142f0018746326d5f8c3ac714fe844edd" target="_blank">census-proof</a>
+          </li>
+          <li>
+            some voting system <i>designs &#38; implementations</i> <a
+  href="https://github.com/aragonzkresearch/research/blob/main/ovote/ovote.pdf"
+  target="_blank">OVOTE</a> and <a
+href="https://github.com/aragonzkresearch/research/blob/main/blind-ovote/blind-ovote.pdf"
+target="_blank">Blind-OVOTE</a>.
+          </li>
+          <li>
+            <i>FHE (full-homomorphic encryption)</i> schemes such as CKKS, BFV, TFHE at <a href="https://github.com/arnaucube/fhe-study" target="_blank">fhe-study</a>.
+          </li>
+        </ul>
+        <!--
+        Interested on implementing cryptographic primitives (both rust libraries and zk circuits).
+Examples of things I've enjoyed working on these past years:
+
+- Rust libraries: various folding schemes implementations (Nova, HyperNova, ProtoGalaxy, CycleFold) (which included also implementing circuits), various commitment schemes (KZG, IPA, FRI), various signature schemes.
+- zk circuits: various elliptic curve signature schemes, keccak256 hash function in circom.
+
+Maybe a common denominator from all the above would be: deep rabbit hole to dive into, requiring math understanding together with coding knowledge; ie. take a paper - study it - implement it.
+        -->
+      </div>
+
+      <br>
+    </div>
+
+      <!-- <br><br><br> -->
+      <!-- <hr style="width:70%;"> -->
+      <!-- <br><br> -->
+
+      <div class="column" style="font-size:100%;">
+      <h2>Recent <b>Work</b>:</h2>
+
+      <div class="recent-work-box">
+        <h4 class="gray">2023 - now</h4>
+        <!-- 2023 -->
+        <h3 style="display:inline;"><a href="https://research.0xparc.org" target="_blank" class="recentwork">0xPARC Research</a> -</h3>
+        <i style="display:inline;">Applied cryptography research</i>
+        <br>
+        Research and implementations of folding schemes.
+        <ul>
+          <li>
+            <span class="gray">privacy-ethereum/</span><a href="https://github.com/privacy-ethereum/sonobe" target="_blank">sonobe</a>: folding schemes modular library. Implemented Nova, CycleFold, HyperNova and part of ProtoGalaxy. Also designed the onchain verification approach which allowed Sonobe to be the first folding schemes library to achieve verifying folding proofs in Ethereum.
+            <ul><li><a href="https://github.com/privacy-ethereum/sonobe" target="_blank">sonobe</a>, <a href="https://privacy-ethereum.github.io/sonobe-docs" target="_blank">sonobe-docs</a></li></ul>
+          </li>
+          <li>
+            <a href="https://github.com/arnaucube/protogalaxy-poc" target="_blank">protogalaxy-poc</a>: ProtoGalaxy folding scheme proof of concept implementation
+          </li>
+          <li>
+            <span class="gray">privacy-scaling-explorations/</span><a href="https://github.com/privacy-scaling-explorations/multifolding-poc" target="_blank">multifolding-poc</a>: HyperNova folding scheme proof of concept implementation 
+          </li>
+      </div>
+
+      <!-- <hr style="width:40%;margin-left:0;margin-bottom:30px;margin-top:20px;"> -->
+
+      <div class="recent-work-box">
+        <h4 class="gray">2022 - 2023</h4>
+        <!-- 2022 - 2023 -->
+        <h3 style="display:inline;"><a href="https://vocdoni.io" target="_blank" class="recentwork">Vocdoni</a> & <a href="https://research.aragon.org/about/" target="_blank" class="recentwork">Aragon-ZK-Research</a> -</h3>
+      <i style="display:inline;">Decentralized governance & voting tooling.</i>
+        <br>
+        Design and implementation of voting schemes using zkSNARKs and other cryptographic schemes.
+        <!-- Design and implementation of <a href="https://docs.vocdoni.io/architecture/protocol/anonymous-voting/zk-census-proof.html#implementation-spec" target="_blank">anonymous voting solutions</a> using zkSNARKs. -->
+        <!-- Introduced <a href="https://github.com/vocdoni/protocol/discussions/23" target="_blank">some</a> design <a href="https://github.com/vocdoni/zk-franchise-proof-circuit/commit/2efeecc12669279dcf493bd9c782ba80b3c87dc8" target="_blank">optimizations</a> in the circuits which reduced the number of constraints. -->
+        <!-- <br>Also, contributed to <span class="gray">vocdoni/</span><a href="https://github.com/vocdoni/vocdoni-node/commits?author=arnaucube" target="_blank">vocdoni-node</a> adding zk related code. -->
+        <!-- <br> -->
+        <!-- Other stuff implemented: -->
+        <br>
+        <ul>
+          <li>
+            <span class="gray">vocdoni/</span><a href="https://github.com/vocdoni/keccak256-circom" target="_blank">keccak256-circom</a>: ethereum sha3 (keccak256) hash function implemented in Circom
+          </li>
+          <li>
+            <span class="gray">vocdoni/</span><a href="https://github.com/vocdoni/zk-franchise-proof-circuit" target="_blank">zk-census-proof</a>: anonymous census proof circuit used in Vocdoni's Blockchain
+            <ul>
+              <li>
+                <span class="gray">aragonzkresearch/</span><a href="https://github.com/aragonzkresearch/ark-anon-vote" target="_blank">ark-anon-vote</a>: (similar design, implemented in arkworks) onchain anonymous voting snark circuit.
+              </li>
+            </ul>
+          </li>
+          <li>
+            <span class="gray">vocdoni/</span><a href="https://github.com/vocdoni/arbo" target="_blank">arbo</a>: optimized MerkleTree which parallelizes by CPUs for faster computation, compatible with circomlib implementation
+          </li>
+            <li>
+              <span class="gray">aragonzkresearch/</span><a href="https://github.com/aragonzkresearch/ark-ec-blind-signatures" target="_blank">ark-ec-blind-signatures</a>: Blind signatures over elliptic curve implementation (native & r1cs constraints)
+            </li>
+          </ul>
+          <span style="">OVOTE</span>: Offchain Voting with Onchain Trustless Execution (kind of a validity-Rollup for voting)
+          <ul>
+            <li>
+              <a href="https://research.aragon.org/docs/ovote" target="_blank">OVOTE technical document</a>
+            </li>
+            <li>
+              <a href="https://forum.aragon.org/t/we-present-ovote-offchain-voting-with-onchain-trustless-execution/3603" target="_blank">Forum post</a> with a high level explanation.
+            </li>
+            <li>
+              <span class="gray">aragonzkresearch/</span><a href="https://github.com/aragonzkresearch/ovote" target="_blank">ovote</a>: implementation of the OVOTE circuits, smart contracts & libs
+            </li>
+            <li>
+              <span class="gray">aragonzkresearch/</span><a href="https://github.com/aragonzkresearch/ovote-node" target="_blank">ovote-node</a>: OVOTE backend node implemented in Go
+            </li>
+          </ul>
+          <span style="">Blind-OVOTE</span>: (OVOTE with Blind Signatures) L2 validity rollup combined with blind signatures over elliptic curves inside zkSNARK, to provide offchain anonymous voting with onchain binding execution on Ethereum
+          <ul>
+            <li>
+              <a href="https://research.aragon.org/docs/blind-ovote" target="_blank">Blind-OVOTE technical document</a>
+            </li>
+            <li>
+              <a href="https://forum.aragon.org/t/blind-ovote-ovote-with-blind-signatures-for-voter-anonymity/3881" target="_blank">Forum post</a> with a high level explanation.
+            </li>
+            <li>
+              <span class="gray">aragonzkresearch/</span><a href="https://github.com/aragonzkresearch/blind-ovote" target="_blank">blind-ovote</a>: Blind-OVOTE implementation in arkworks.
+            </li>
+          </ul>
+      </div>
+      <!-- <hr> -->
+      <!-- <hr style="width:40%;margin-left:0;margin-bottom:30px;margin-top:20px;"> -->
+      <div class="recent-work-box">
+        <h4 class="gray">2018 - 2022</h4>
+          <!-- 2021 - 2022 -->
+        <h3 style="display:inline;"><a href="https://hermez.io" target="_blank" class="recentwork">Hermez zkRollup</a> -</h3>
+        <i style="display:inline;"> Decentralized zkRollup on Ethereum.</i><br>
+        Main task has been to implement the Hermez node,
+          used to <a href="https://cointelegraph.com/news/hermes-network-launches-zk-rollups-on-ethereum-mainnet-to-process-cheap-payments"
+                     target="_blank">launch the mainnet</a> of the zkRollup network (1.0):
+             <br><span style="margin-left:30px;"></span>  <span class="gray">hermeznetwork/</span><a href="https://github.com/arnaucube/hermez-node" target="_blank">hermez-node</a>
+          <br>My focus has been mainly in the TxSelector, TxProcessor (managing
+          the rollup state tree) and BatchBuilder (generating the data
+          structure compatible with the zkSNARK circuits to do the proof generation).
+        <!-- </div> -->
+        <!-- <hr> -->
+        <!-- <hr style="width:40%;margin-left:0;margin-bottom:30px;margin-top:20px;"> -->
+        <!-- <div class="recent-work-box"> -->
+          <!-- 2018 - 2021 -->
+          <br><br>
+        <h3 style="display:inline;"><a href="https://iden3.io" target="_blank" class="recentwork">iden3</a> -</h3>
+        <i style="display:inline;"> Scalable decentralized identity system with privacy by using zero knowledge proofs.</i><br>
+        Design and specify the core protocol, develop the core libraries, servers, zk circom circuits and zkSNARK Groth16 Go prover.
+        <ul>
+          <li>
+            <span class="gray">iden3/</span><a href="https://github.com/iden3/go-iden3-crypto" target="_blank">go-iden3-crypto</a>: cryptographic primitives (SNARK-friendly) used in iden3 </li>
+          <li>
+            <span class="gray">iden3/</span><a href="https://github.com/iden3/go-iden3-core" target="_blank">go-iden3-core</a>: core implementation of the iden3 system
+          </li>
+          <li>
+            <span class="gray">iden3/</span><a href="https://github.com/iden3/go-circom-prover-verifier" target="_blank">go-circom-prover-verifier</a>: implementation of the Groth16 zkSNARK Prover and Verifier compatible with Circom 
+          </li>
+          <li>
+            <span class="gray">iden3/</span><a href="https://github.com/iden3/circuits" target="_blank">circuits</a>: zkSNARK circuits used by the iden3 core protocol
+          </li>
+        </ul>
+
+</div>
+
+<div style="font-size:80%;">
+      <h2>Some other <b>free time</b> side projects:</h2>
+      <ul>
+        <li>
+          <a href="https://github.com/arnaucube/go-snark-study" target="_blank">go-snark-study</a>: <code>Go</code> zkSNARK implementation from scratch (compiler, setup, prover, verifier)
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/go-bellman-verifier" target="_blank">go-bellman-verifier</a>: <code>Go</code> Groth16 zkSNARK bellman proof verifier using cloudflare/bn256 Pairing
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/babyjubjub-rs" target="_blank">babyjubjub-rs</a>: BabyJubJub elliptic curve implementation in <code>Rust</code>
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/kzg-commitments-study" target="_blank">kzg-commitments</a>: Kate-Zaverucha-Goldberg (KZG10) Polynomial Commitments in <code>Go</code>
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/fri-commitment" target="_blank">fri-commitment</a>: FRI polynomial commitment in <code>Rust</code>
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/ipa-rs" target="_blank">ipa-rs</a>: modified Inner Product Argument (IPA) version from Halo paper in <code>Rust</code> using arkworks.
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/ring-signatures-rs" target="_blank">ring-signatures-rs</a>: bLSAG ring signatures implementation in <code>Rust</code>
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/poseidon-rs" target="_blank">poseidon-rs</a>: Poseidon hash implementation in <code>Rust</code>
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/go-blindsecp256k1" target="_blank">go-blindsecp256k1</a>: Blind signatures over secp256k1 elliptic curve in <code>Go</code> <i>(with the <a href="https://github.com/arnaucube/blindsecp256k1-js" target="_blank">compatible typescript implementation</a>)</i>
+        </li>
+      <!-- </ul> -->
+      <!-- Other: -->
+      <!-- <ul> -->
+        <!-- <li> -->
+        <!--   <a href="https://github.com/arnaucube/evm-rs" target="_blank">evm-rs</a>: Ethereum Virtual Machine in <code>Rust</code> -->
+        <!-- </li> -->
+        <!-- <li> -->
+        <!--   <a href="https://github.com/arnaucube/go-dht" target="_blank">go-dht</a>: Kademlia DHT implementation in <code>Go</code> -->
+        <!-- </li> -->
+        <li>
+          <a href="https://github.com/arnaucube/merkletree-rs" target="_blank">merkletree-rs</a>: Sparse MerkleTree implementation in <code>Rust</code> (also a <code>Go</code> impl <a href="https://github.com/arnaucube/go-merkletree" target="_blank">go-merkletree</a>)
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/shamirsecretsharing" target="_blank">shamirsecretsharing</a>: Shamir's Secret Sharing <code>Rust</code> & <code>Go</code> implementation + <code>WASM</code> lib
+        </li>
+        <!-- <li> -->
+        <!--   <a href="https://github.com/arnaucube/cryptofun" target="_blank">cryptofun</a>: Crypto algorithms from scratch, in order to get familiar with them from inside. For example: ECC, Paillier, RSA, Homomorphic computation, ElGamal, Schnorr, ECDSA, BN128, ... -->
+        <!-- </li> -->
+        <li>
+          <a href="https://github.com/arnaucube/evm-rs" target="_blank">evm-rs</a>: partial implementation of the Ethereum Virtual Machine (EVM) in <code>Rust</code>
+        </li>
+        <li>
+          <a href="https://kvartalo.github.io/website/" target="_blank">kvartalo</a>: a local social cryptocurrency for neigbourhoods, that we used in a Barcelona neighbourhood as experiment during few months. Build on top of Ethereum blockchain & Tendermint Core
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/chip8-rs" target="_blank">chip8-rs</a>: CHIP-8 virtual machine emulator written in <code>Rust</code> (also a <code>Go</code> impl <a href="https://github.com/arnaucube/go-chip8" target="_blank">go-chip8</a>)
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/fft-rs" target="_blank">fft-rs</a>: Fast Fourier Transform (FFT) implementation in <code>Rust</code>
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/miksi-core" target="_blank">miksi</a>: Ethereum zk-coin-mixer where all the computation & constructions are done offchain and then proved inside a zkSNARK to the smart-contract. <i><a href="https://arnaucube.github.io/miksi-app/" target="_blank">(live demo on testnet)</a></i>
+        </li>
+        <li>
+          <a href="https://github.com/arnaucube/eth-kzg-ceremony-alt" target="_blank">eth-kzg-ceremony-alt</a>: Alternative implementation of the contributor-client for the Ethereum KZG Trusted Setup Ceremony
+        </li>
+      </ul>
+
+      More projects directly in github: <a href="https://github.com/arnaucube?tab=repositories" target="_blank">https://github.com/arnaucube</a> <i>(Mirror of all the repos at: <a href="https://git.arnaucube.com/arnaucube?sort=moststars" target="_blank">https://git.arnaucube.com</a>)</i>.
+      </div>
+
+      <br><br><br>
+      <p style="padding:0;margin:0;font-size:120%;">
+        <a href="blog/index.html">blog</a>
+        <span style="margin: 10px;">|</span>
+        <a href="https://github.com/arnaucube" target="_blank">github</a>
+        <span style="font-style:italic;">(<a href="https://git.arnaucube.com/arnaucube?sort=moststars" target="_blank">git-mirror</a>)</span>
+        <span style="margin: 10px;">|</span>
+        <a href="https://twitter.com/arnaucube" target="_blank">twitter</a>
+      </p>
+      <br><br>
+      <img src="img/email.png" />
+
+
+    
+      
+      <!-- <hr> -->
+      <!-- <br> -->
+    </div>
+
+    </div>
+  </div>
+  </div>
+
+
+  <!-- threejs -->
+  <script src="js/three.min.js"></script>
+  <script src="js/Detector.js"></script>
+  <script src="js/tresd.min.js"></script>
+  <!-- <script src="js/tresd.js"></script> -->
+  <script>
+    const toggleButton = document.getElementById("theme-toggle");
+    let savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      savedTheme = "dark-theme";
+    }
+    if (savedTheme !== "dark-theme") {
+      savedTheme = "light-theme";
+    }
+    document.body.classList.remove("light-theme", "dark-theme");
+    document.body.classList.add(savedTheme);
+    toggleButton.innerHTML = savedTheme === "dark-theme" ? "&#9790;" : "&#9728;";
+
+    toggleButton.addEventListener("click", function () {
+      const currentTheme = localStorage.getItem("theme") === "dark-theme" ? "dark-theme" : "light-theme";
+      const nextTheme = currentTheme === "dark-theme" ? "light-theme" : "dark-theme";
+      document.body.classList.remove("light-theme", "dark-theme");
+      document.body.classList.add(nextTheme);
+      localStorage.setItem("theme", nextTheme);
+      toggleButton.innerHTML = nextTheme === "dark-theme" ? "&#9790;" : "&#9728;";
+    });
+
+    tresd = "cube";
+    init();
+    animate();
+  </script>
+</body>
+
+</html>
