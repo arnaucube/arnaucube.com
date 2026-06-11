@@ -78,7 +78,7 @@ body {
 .container[style*='max-width:800px'],
 #markdown.container {
   margin-top: 30px !important;
-  max-width: 760px !important;
+  max-width: 800px !important;
   padding: 0 18px;
 }
 
@@ -96,16 +96,19 @@ h5 {
   line-height: 1.35;
 }
 
-h1 { font-size: 1.95rem; }
-h2 { font-size: 1.5rem; }
-h3 { font-size: 1.24rem; }
+h1 { font-size: 1.95rem!important; }
+h2 { font-size: 1.5rem!important; }
+h3 { font-size: 1.24rem!important; }
+h4 { font-size: 1.0rem!important; }
+h5 { font-size: 0.84rem!important; }
+h6 { font-size: 0.60rem!important; }
 
 h1 a,
 h2 a,
 h3 a,
 h4 a,
 h5 a {
-  color: inherit !important;
+  color: black !important;
   text-decoration: none !important;
 }
 
@@ -141,7 +144,7 @@ pre {
 
 blockquote {
   background: transparent;
-  border-left: 2px solid var(--border);
+  border-left: 6px solid var(--border);
   margin: 1.3em 0;
   padding: 0.3em 0 0.3em 0.9em;
   color: var(--muted);

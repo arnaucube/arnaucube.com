@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta name="description" content="A non-exhaustive overview of tools I use daily." />
+    <meta charset="utf-8">
+    <title> Tools - arnaucube - blog</title>
+    <meta name="title" content=" Tools - arnaucube - blog">
+    <meta name="description" content="A non-exhaustive overview of tools I use daily.">
+
+    <meta property="og:title" content=" Tools - arnaucube - blog" />
+    <meta property="og:description" content="A non-exhaustive overview of tools I use daily." />
+    <meta property="og:url" content="https://arnaucube.com/blog/tools.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://arnaucube.com/blog/img/posts/tools/tools-preview.png" />
+    <meta name="twitter:title" content=" Tools - arnaucube - blog">
+    <meta name="twitter:description" content="A non-exhaustive overview of tools I use daily.">
+    <meta name="twitter:image" content="https://arnaucube.com/blog/img/posts/tools/tools-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="author" content="arnaucube">
+
+    <link rel="icon" type="image/png" href="img/logoArnauCubeFavicon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- highlightjs -->
+    <!-- <link rel="stylesheet" href="js/highlightjs/atom-one-dark.css"> -->
+    <link rel="stylesheet" href="js/highlightjs/atom-one-light.css">
+    <!-- <link rel="stylesheet" href="js/highlightjs/gruvbox-dark.css"> -->
+    <script src="js/highlightjs/highlight.pack.js"></script>
+
+    <!-- katex -->
+    <link rel="stylesheet" href="js/katex/katex.min.css">
+  </head>
+
+  <body>
+
+    <!-- o_gradient_background" -->
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top"
+                      style="height:50px;font-size:100%;">
+      <div class="container">
+        <div style="float:left;">
+        <a href="/blog" style="color:#000;display:inline-block;">blog</a>
+        <span style="margin-right:20px; margin-left:20px;">|</span>
+        <a href="/blog/notes.html" style="font-size:90%;color:#000;display:inline-block;">notes</a>
+        </div>
+        <div style="float:right;">
+          <a href="/" style="color:#000;display:inline-block;margin-right:10px;">arnaucube.com</a>
+          <div class="onoffswitch" style="margin-left:0px;display:inline-block;" title="change theme">
+            <input onclick="switchTheme()" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+              id="themeSwitcher">
+            <label class="onoffswitch-label" for="themeSwitcher"></label>
+          </div>
+        </div>
+      </div>
+      <!-- <img style="height:5px; width:100%; margin-top:8px;" src="img/gradient-line.jpg" /> -->
+    </nav>
+
+
+
+    <div class="container" style="margin-top:0px;max-width:800px;">
+      <h1>Tools</h1>
+
+<p><em>2026-06-08</em></p>
+
+<p>A non-exhaustive overview of tools I use daily.</p>
+
+<p><em>I had this post half-written for a couple of years, finally I&rsquo;ve put the time to &lsquo;complete&rsquo; it enough to publish it. See it as a kind of email to a friend sharing my ways of approaching everyday tools.</em></p>
+
+<h2>in general</h2>
+
+<ul>
+<li>Always be willing to <strong>customize and optimmize</strong> the tools you use</li>
+<li>Usually closed source tools come with &lsquo;defaults&rsquo; that may &lsquo;suit the majority&rsquo; (or that it&rsquo;s acceptable enough), but does not mean that you have to conform with it. This is another reason (from many) to use freesoftware or if not, opensource.</li>
+<li>when willing to use a tool, if it is closed source, always check <strong>free software / opensource</strong> alternatives, usually they exist and have an active community around them</li>
+<li>prefer <strong>terminal</strong> tools over GUI tools. In this way, working remotely inside a server feels the same as working locally in your laptop, just the terminal and the tool in there</li>
+<li>prefer offline tools than online tools</li>
+<li>In physical objects optimize for <strong>portability</strong>; also usually is good to not centralize many functions in a single object</li>
+</ul>
+
+<h2>computer</h2>
+
+<ul>
+<li>in general
+
+<ul>
+<li>maximize keyboard shortcuts, and minimize keyboard surface
+
+<ul>
+<li>I use a <strong>40% keyboard, <a href="https://github.com/foostan/crkbd">corne</a></strong> keyboard</li>
+<li>the idea is that instead of moving your fingers to the keys, you want to move the keys under your fingers (eg. for numbers &amp; symbols, F1 keys, etc)
+<div style="text-align:center;">
+<a target="_blank" href="img/posts/tools/corne.png"><img style="width:60%" src="img/posts/tools/corne.png"></img></a>
+<br>
+<i style="font-size:75%">the Corne keyboard I use, self-assembled and soldered</i>
+</div></li>
+</ul></li>
+<li><strong>minimize mouse</strong> usage:
+
+<ul>
+<li>using the mouse means lifting the fingers from the keyboard</li>
+<li>mouse limits an entire hand to only click buttons, you have many more fingers to use</li>
+<li>so, naturally, <strong><a href="https://www.vim.org">vim</a> &amp; <a href="https://neovim.io">neovim</a></strong> as code and text editors
+
+<ul>
+<li>also this has the benefit that working in my laptop or working in the server feels the same</li>
+</ul></li>
+<li>window manager: till last year I was using <a href="https://i3wm.org">i3</a>, now I&rsquo;m using <a href="https://swaywm.org">sway</a>. The main idea is to be able to move quick across windows and panels, while avoiding touching the mouse.</li>
+</ul></li>
+<li>automate:
+
+<ul>
+<li>this is, bash &amp; python scripts are very useful; for almost every task that has more than 3 iterations of the same steps</li>
+<li>OS: of course, Linux. For the past 3 years I&rsquo;ve been using <a href="https://nixos.org">NixOS</a>, attracted by it&rsquo;s imperative philosophy: you have a set of config files, format a laptop, load your config, and you have all your software with your configurations ready to use (ie. not manually {apt/pacman}-installing each software package)</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>This is not only for code files; for example, when working on a <span class="math inline">\(LaTeX\)</span> document, edit it in neovim with <a href="https://github.com/lervag/vimtex">vimtex</a>, so that at save it re-renders the pdf and reloads it in <a href="https://pwmt.org/projects/zathura/">zathura</a>. Additionally, this works great while being offline, compared to mainstream options such as overleaf.
+Similarly, when working on a markdown document, use <a href="https://github.com/arnaucube/md-live-server">md-live-server</a> locally, splitting the screen between the terminal for editing and <a href="https://qutebrowser.org/">qutebrowser</a>, so that no mouse is needed any time.</p>
+
+<div style="text-align:center;">
+<a target="_blank" href="img/posts/tools/desk-setup.jpg"><img style="width:75%" src="img/posts/tools/desk-setup.jpg"></img></a>
+<br>
+<i style="font-size:75%">a bit old (~2023) desk setup, with my 'old' Thinkpad Carbon X1</i>
+</div>
+
+<h4>devices</h4>
+
+<!-- TODO picture corne + screens -->
+
+<ul>
+<li>At home:
+
+<ul>
+<li>I build a ~850 euros server (year 2024), with AMD Ryzen 9 5900XT 3.3 GHz 16-Core, 64 GB of RAM.</li>
+<li>to work, I usually <a href="https://mosh.org/">mosh</a> (ssh) into it, then open a <a href="https://github.com/tmux/tmux">tmux</a> and <a href="https://neovim.io/">neovim</a>, and work there, so that I can use any (lightweight) laptop while remotely running everything in the powerful-enough server.
+Another point for using vim/neovim as default code editor, is that when working remotely on a server, the setup remains the same. Another perspective is that you treat your laptop as a server for those kinds of tasks, so that when you work remotely on a server there is almost no difference.
+<div style="text-align:center;">
+<a target="_blank" href="img/posts/tools/server.jpg"><img style="width:60%" src="img/posts/tools/server.jpg"></img></a>
+</div></li>
+</ul></li>
+<li>Outside home:
+
+<ul>
+<li>for many years I used a Thinkpad x270 of 12.5&rdquo; screen, then a Thinkpad Carbon X1 of 13&rdquo;, but then few years ago I started using smaller laptops of 10&rdquo;</li>
+<li>10&rdquo; laptop: I was using a 2nd hand <a href="https://support.microsoft.com/en-us/surface/surface-go-2-specs-and-features-0fc6a657-2851-484f-6f82-bd3c589ed92c">Surface Go 2</a> that I bought for 200 euros, but recently I&rsquo;ve replaced it with a <a href="https://www.chuwi.com/product/items/chuwi-minibook-x-n150.html">Chuwi Minibook X</a> which costs 300 euros (brand new). Both laptops have 10&rdquo;.</li>
+<li>8&rdquo; tablet + notebook; or if in the sun, instead of the tablet, a eink reader (if so, a <a href="https://koreader.rocks">hacked one</a>)</li>
+</ul></li>
+</ul>
+
+<div style="text-align:center;">
+<a target="_blank" href="img/posts/tools/big-slingbag-contents.jpg"><img style="width:60%;" src="img/posts/tools/big-slingbag-contents.jpg"></img></a>
+<br>
+<i style="font-size:75%">8" tablet and 10" laptop</i>
+</div>
+
+<p>A benefit of using lightweight laptops combined with a remote <em>powerful</em> server, is that the battery lasts longer than doing everything in the laptop, since you&rsquo;re not doing many computations locally in the laptop!</p>
+
+<h2>services</h2>
+
+<p>Useful to have some raspberrypi/minipc at home with some services to make your life more comfortable (for example, with: <a href="https://github.com/arnaucube/configs/blob/master/server-dockers/docker-compose.yml">docker compose configuration file</a>).</p>
+
+<p>For about 2 years I&rsquo;ve been running multiple media services in a raspberry pi 5, recently replaced it with a Beelink S13 NUC, where I can support many users of non-technical friends.
+<div style="text-align:center;">
+<a target="_blank" href="img/posts/tools/media-setup.png"><img style="width:80%;" src="img/posts/tools/media-setup.png"></img></a>
+</div></p>
+
+<p>Useful services:</p>
+
+<ul>
+<li><a href="https://github.com/qbittorrent/qBittorrent">qbittorrent-nox</a>: the server version of qbittorrent, managed through a web UI</li>
+<li><a href="https://jellyfin.org/">Jellyfin</a>: stream all the downloaded content (shows, movies, music) to your devices (tv, tablet, phone, laptop, etc)</li>
+<li><a href="https://github.com/slskd/slskd/">slskd</a>: server client for the <a href="https://en.wikipedia.org/wiki/Soulseek">Soulseek network</a>, in order to download individual songs or albums that are not found through torrent</li>
+</ul>
+
+<p>Highly recommended: with the previous services, you have all the minimal setup to enjoy media at home; but there is more dimension to it; the various projects within the *arr family, eg:
+<a href="https://sonarr.tv/">sonarr</a>, <a href="https://radarr.video/">radarr</a>, <a href="https://www.bazarr.media/">bazarr</a>, <a href="https://prowlarr.com/">prawlarr</a>, etc.</p>
+
+<p>Then you can tie all those services through a main page with <a href="https://gethomepage.dev">homepage</a>, so that all links are accessible with a single click.</p>
+
+<p>Also, using browser <a href="https://github.com/gorhill/uBlock">adblockers</a> has become a must over the years, additionally having a <a href="https://pi-hole.net">pi-hole</a> connected to your router filters out adds in general on your home network (on all devices!), while also filtering out a big portion of trackers.</p>
+
+<h2>AFK / on the go</h2>
+
+<p><em>(AFK: away from keyboard, when I go outside of home)</em></p>
+
+<ul>
+<li>sometimes I bring a slim-foldable keyboard</li>
+<li>during the day (if I don&rsquo;t require a laptop): slingbag with
+
+<ul>
+<li>notebook and fountain pens</li>
+<li>eink reader (ie. hacked kindle) or a 8&rdquo; tablet</li>
+</ul></li>
+</ul>
+
+<div style="text-align:center;">
+<a target="_blank" href="img/posts/tools/small-slingbag-contents.jpg"><img style="width:60%;" src="img/posts/tools/small-slingbag-contents.jpg"></img></a>
+</div>
+
+<p><br>
+<div style="text-align:center;">
+<a target="_blank" href="img/posts/tools/notebook-kindle-outside.jpg"><img style="width:60%" src="img/posts/tools/notebook-kindle-outside.jpg"></img></a>
+    <br>
+    <i style="font-size:75%">can just randomly pop out of home and just sit anywhere to keep studying</i>
+</div></p>
+
+<ul>
+<li>travel: <a href="https://www.patagonia.com/product/refugio-daypack-30-liters/47928.html">30L backpack</a> with
+
+<ul>
+<li><a href="#pens-and notebooks">notebook</a></li>
+<li>eink reader / tablet 8&rdquo;</li>
+<li>laptop (see <a href="#devices">laptop</a> section)</li>
+<li>clothes for 7 days, on the 6th day you do laundry, so you can travel long periods of time, virtually indefinite</li>
+</ul></li>
+</ul>
+
+<div style="text-align:center;">
+<a target="_blank" href="img/posts/tools/backpack.jpg"><img style="width:80%;" src="img/posts/tools/backpack.jpg"></img></a>
+</div>
+
+<p>With this backpack setup I&rsquo;ve traveled across the world (6 continents), with stays ranging from few days to 2 months, all with same backpack setup.</p>
+
+<p><br></p>
+
+<p>Notes about the picture above: this picture is from &gt;2 years ago, some changes I did since then:</p>
+
+<ul>
+<li>laptop: the Surface Go 2 has been replaced by the Chuwi Minibook X (both of 10&rdquo;), see <a href="#devices">laptop</a> section for more details</li>
+<li>tablet: the 10&rdquo; tablet has been replaced by a 8&rdquo; tablet</li>
+<li>emulator: the <a href="https://www.goretroid.com/products/retroid-pocket-4-handheld">Retroid Pocket 4 Pro</a> has been replaced by the <a href="https://retrogamecorps.com/2022/05/15/miyoo-mini-v2-guide/">Myioo Mini Plus</a> (less powerful, so less console options, but smaller in the backpack; ideal for GBA games!)</li>
+</ul>
+
+<h3>pens and notebooks</h3>
+
+<p>In the recent years I&rsquo;ve discovered the joy of using <a href="https://www.reddit.com/r/fountainpens">fountain pens</a>. They are not essential, but is one of those little joys of life.</p>
+
+<p>I&rsquo;ve had the opportunity to try many different models, both from buying some of them and also from trying them in-store (in Seoul there is <a href="https://maps.app.goo.gl/quDc2oAfb8Kn6Rug7">a very nice shop</a> where for a small fee you have all the time you need to roam through the shop trying more than 200 pens!)</p>
+
+<div style="text-align:center;">
+<a target="_blank" href="img/posts/tools/penshop-bestpen.png"><img style="width:80%;" src="img/posts/tools/penshop-bestpen.png"></img></a>
+    <br>
+    <i style="font-size:75%">In purple t-shirt, enjoying 2h of trying many many pens at <a href="https://maps.app.goo.gl/quDc2oAfb8Kn6Rug7" target="_blank">BestPen</a>, Seoul (South Korea).</i>
+</div>
+
+<p>Beware, once you enter the fountain pens rabbit hole, the next worry is the paper, hence a natural following fixation are the notebooks to use with the fountain pens. Not all papers are good enough for fountain pens, but there are <a href="https://md-product.com/en/collections/md-notebook">some</a> very <a href="https://www.clairefontaine.com/gb/3525-10811-carnet-brochure-age-bag-795401c.html#/1182-rulings-o_uni/1756-dimension-145_x_21_cm/1971-couleur_produit-gris">good</a> paper <a href="https://www.youtube.com/watch?v=c_UvVavl-eE">quality</a> notebooks. Similarly inks are another <a href="https://mountainofink.com">rabbit hole</a>.</p>
+
+<div style="text-align:center;">
+<a target="_blank" href="img/notebooks.jpg"><img style="width:80%;" src="img/notebooks.jpg"></img></a>
+</div>
+
+    </div>
+
+    <footer style="text-align:center; margin-top:100px;margin-bottom:50px;">
+      <div class="container">
+        <br>
+        <a href="/blog">Go to main</a>
+        <br><br>
+        <div class="row">
+          <ul class="list-inline">
+            <li><a href="https://twitter.com/arnaucube"
+                   style="color:gray;text-decoration:none;"
+                   target="_blank">twitter.com/arnaucube</a>
+            </li>
+            <li><a href="https://github.com/arnaucube"
+                   style="color:gray;text-decoration:none;"
+                   target="_blank">github.com/arnaucube</a>
+            </li>
+          </ul>
+        </div>
+        <div class="row" style="display:inline-block;">
+          Blog made with <a href="http://github.com/arnaucube/blogo/"
+                            target="_blank" style="color: gray;text-decoration:none;">Blogo</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+    </script>
+    <script src="js/external-links.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script defer src="js/katex/katex.min.js"></script>
+    <script defer src="js/katex/auto-render.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          displayMode: false,
+          // customised options
+          // • auto-render specific keys, e.g.:
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "\\(", right: "\\)", display: false},
+            {left: "\\begin{equation}", right: "\\end{equation}", display: true}
+          ],
+          // • rendering keys, e.g.:
+          throwOnError : true
+        });
+      });
+
+      ///
+      let theme = localStorage.getItem("theme");
+      if ((theme === "light-theme")||(theme==null)) {
+          theme = "light-theme";
+          document.getElementById("themeSwitcher").checked = false;
+      } else if (theme === "dark-theme") {
+          theme = "dark-theme";
+          document.getElementById("themeSwitcher").checked = true;
+      }
+      document.body.className = theme;
+      localStorage.setItem("theme", theme);
+
+      function switchTheme() {
+        theme = localStorage.getItem("theme");
+        if (theme === "light-theme") {
+          theme = "dark-theme";
+          document.getElementById("themeSwitcher").checked = true;
+        } else {
+          theme = "light-theme";
+          document.getElementById("themeSwitcher").checked = false;
+        }
+        document.body.className = theme;
+        localStorage.setItem("theme", theme);
+
+        console.log(theme);
+      }
+    </script>
+    <script>
+    function tagLinks(tagName) {
+      var tags = document.getElementsByTagName(tagName);
+      for (var i=0, hElem; hElem =  tags[i]; i++) {
+        if (hElem.parentNode.className=="row postThumb") {
+          continue;
+        }
+        hElem.id = hElem.innerHTML.toLowerCase().replace(" ", "-");
+        hElem.innerHTML = "<a style='color:black!important;' href='#"+hElem.id+"'>"+hElem.innerHTML+"</a>";
+      }
+    }
+    tagLinks("h2");
+    tagLinks("h3");
+    tagLinks("h4");
+    tagLinks("h5");
+    </script>
+    <script>
+function generateTOC(tocContainerId = "toc") {
+    const tocContainer = document.getElementById(tocContainerId);
+    if (!tocContainer) return;
+
+    const headings = document.querySelectorAll("h2, h3, h4, h5, h6");
+    if (!headings.length) return;
+
+    // Generate IDs if missing
+    headings.forEach((heading, index) => {
+        if (!heading.id) {
+            heading.id =
+                heading.textContent
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^\w\s-]/g, "")
+                    .replace(/\s+/g, "-") +
+                "-" +
+                index;
+        }
+    });
+
+    const toc = document.createElement("ul");
+    let currentLevel = 1;
+    let currentList = toc;
+    const stack = [toc];
+
+    headings.forEach((heading) => {
+        const level = parseInt(heading.tagName.substring(1), 10);
+
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+
+        a.href = "#" + heading.id;
+        a.textContent = heading.textContent;
+
+        li.appendChild(a);
+
+        if (level > currentLevel) {
+            for (let i = currentLevel; i < level; i++) {
+                const nestedList = document.createElement("ul");
+
+                const lastLi =
+                    currentList.lastElementChild ||
+                    currentList.appendChild(document.createElement("ul"));
+
+                lastLi.appendChild(nestedList);
+
+                stack.push(nestedList);
+                currentList = nestedList;
+            }
+        } else if (level < currentLevel) {
+            for (let i = currentLevel; i > level; i--) {
+                stack.pop();
+            }
+            currentList = stack[stack.length - 1];
+        }
+
+        currentList.appendChild(li);
+        currentLevel = level;
+    });
+
+    tocContainer.innerHTML = "";
+    tocContainer.appendChild(toc);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    generateTOC();
+});
+    </script>
+    <script src="js/mermaid.min.js"></script>
+
+  </body>
+</html>
+

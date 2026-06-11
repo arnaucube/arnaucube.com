@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta name="description" content="Overview of how the post-quantum lattice-based SNARK scheme Labrador works." />
+    <meta charset="utf-8">
+    <title> Notes on Labrador, a lattice-based SNARK scheme - arnaucube - blog</title>
+    <meta name="title" content=" Notes on Labrador, a lattice-based SNARK scheme - arnaucube - blog">
+    <meta name="description" content="Overview of how the post-quantum lattice-based SNARK scheme Labrador works.">
+
+    <meta property="og:title" content=" Notes on Labrador, a lattice-based SNARK scheme - arnaucube - blog" />
+    <meta property="og:description" content="Overview of how the post-quantum lattice-based SNARK scheme Labrador works." />
+    <meta property="og:url" content="https://arnaucube.com/blog/labrador.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://arnaucube.com/blog/" />
+    <meta name="twitter:title" content=" Notes on Labrador, a lattice-based SNARK scheme - arnaucube - blog">
+    <meta name="twitter:description" content="Overview of how the post-quantum lattice-based SNARK scheme Labrador works.">
+    <meta name="twitter:image" content="https://arnaucube.com/blog/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="author" content="arnaucube">
+
+    <link rel="icon" type="image/png" href="img/logoArnauCubeFavicon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- highlightjs -->
+    <!-- <link rel="stylesheet" href="js/highlightjs/atom-one-dark.css"> -->
+    <link rel="stylesheet" href="js/highlightjs/atom-one-light.css">
+    <!-- <link rel="stylesheet" href="js/highlightjs/gruvbox-dark.css"> -->
+    <script src="js/highlightjs/highlight.pack.js"></script>
+
+    <!-- katex -->
+    <link rel="stylesheet" href="js/katex/katex.min.css">
+  </head>
+
+  <body>
+
+    <!-- o_gradient_background" -->
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top"
+                      style="height:50px;font-size:100%;">
+      <div class="container">
+        <div style="float:left;">
+        <a href="/blog" style="color:#000;display:inline-block;">blog</a>
+        <span style="margin-right:20px; margin-left:20px;">|</span>
+        <a href="/blog/notes.html" style="font-size:90%;color:#000;display:inline-block;">notes</a>
+        </div>
+        <div style="float:right;">
+          <a href="/" style="color:#000;display:inline-block;margin-right:10px;">arnaucube.com</a>
+          <div class="onoffswitch" style="margin-left:0px;display:inline-block;" title="change theme">
+            <input onclick="switchTheme()" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+              id="themeSwitcher">
+            <label class="onoffswitch-label" for="themeSwitcher"></label>
+          </div>
+        </div>
+      </div>
+      <!-- <img style="height:5px; width:100%; margin-top:8px;" src="img/gradient-line.jpg" /> -->
+    </nav>
+
+
+
+    <div class="container" style="margin-top:0px;max-width:800px;">
+      <h1>Notes on Labrador, a lattice-based SNARK scheme</h1>
+
+<p><em>2026-06-11</em></p>
+
+<p>I was curious on how (post-quantum) lattice-based SNARKs would work, and since I had a bit of time these past days, I&rsquo;ve been reading the <a href="https://eprint.iacr.org/2022/1341.pdf">LaBRADOR paper</a>, by Ward Beullens and Gregor Seiler. This post tries to explain the intuition and steps not explicitly shown in the paper, which helped me understanding it.</p>
+
+<p>The structure of this post is the following:</p>
+
+<div id="toc"></div>
+
+<h2>Notation</h2>
+
+<p>The paper uses <span class="math inline">\(\vec{z} \in R^n\)</span> to indicate a vector of length <span class="math inline">\(n\)</span>; for simplicity, in this post I&rsquo;ll use <span class="math inline">\(z \in R^n\)</span>, since it is already clear that we&rsquo;re working with a vector since we use <span class="math inline">\(\in R^n\)</span>.</p>
+
+<p>Also, will use <span class="math inline">\(i \in [n]\)</span> to indicate <span class="math inline">\(i = 1, \ldots, n\)</span>. And <span class="math inline">\((a_{ij})\)</span> denotes the matrix with all the <span class="math inline">\(a_{ij}\)</span> values as entries.</p>
+
+<h2>A bit of background on lattices</h2>
+
+<h3>Lattices intro</h3>
+
+<p>Intuitively, think of lattices as a discrete version of finite-dimensional vector spaces. In the same way that vector spaces span over some basis vectors <span class="math inline">\(\{ b_i ~|~ i \in [n] \}\)</span> in a field, lattices span over the basis in a ring:</p>
+<p><span class="math display">\[\mathcal{L} = \mathcal{L}(B) := B \cdot \mathbb{Z}^k = \{ \sum_{i=1}^k z_i \cdot b_i ~|~ z_i \in \mathbb{Z} \}\]</span></p><p>for a basis <span class="math inline">\(B = \{ b_1, \ldots, b_k \}\)</span> (which since they are a basis, they are linearly independent). <span class="math inline">\(k\)</span> is the rank of the basis, and we restrict our attention to <em>full-rank</em> lattices where <span class="math inline">\(k=n\)</span>.</p>
+
+<p>Since we&rsquo;re at the lattices realm, we work with the polynomial ring <span class="math inline">\(R_q = \mathbb{Z}_q[X]/(X^d + 1)\)</span>, and particularly in Labrador we pick <span class="math inline">\(q\)</span> and <span class="math inline">\(d\)</span> such that <span class="math inline">\(X^d + 1\)</span> splits in two irreducible factors <span class="math inline">\(\pmod q\)</span>.</p>
+
+<p><br></p>
+
+<p>To provide a bit of more intuition, we can relate it to the <em>algebraic coding theory</em> concept of <em>sphere packing problem</em>, where in lattices we use short vectors and in coding theory we&rsquo;re interested into low weighted codewords. Both in lattices and coding theory we have q-ary {lattices/matrices} respectively and also parity check {lattices/matrices} respectively.</p>
+
+<div style="text-align:center;">
+<img style="width:70%"
+src="img/posts/labrador/lattice-spherepackingproblem.png"></img>
+<br>
+<i></i>
+</div>
+
+<h3>MSIS problem</h3>
+
+<p><em>MSIS</em> problem stands for <em>Module Short Integer Solution</em> problem, and it is as follows:</p>
+
+<p>Given a uniformly random matrix <span class="math inline">\(A \in^R R_q^{n \times m}\)</span>, with columns <span class="math inline">\(a_i \in R_q^n\)</span>, find a non-zero integer vector <span class="math inline">\(z \in R^m\)</span> of norm <span class="math inline">\(||z|| \leq \beta\)</span> such that</p>
+<p><span class="math display">\[A \cdot z = \sum_i a_i \cdot z_i = 0 \in R_q^n\]</span></p>
+<blockquote>
+<p><em>Remarks:</em></p>
+
+<ul>
+<li>without <span class="math inline">\(||z|| \leq \beta\)</span>, it is easy to find a solution via <a href="https://math.libretexts.org/Courses/Palo_Alto_College/College_Algebra/05:_Systems_of_Equations_and_Inequalities/5.04:_Solving_Systems_with_Gaussian_Elimination">Gaussian elimination</a>.</li>
+<li><span class="math inline">\(\beta &lt; q\)</span>, because otherwise <span class="math inline">\(z=(q, 0, \ldots, 0) \in R^m\)</span> would always be a valid solution.</li>
+<li><span class="math inline">\(\beta\)</span> and <span class="math inline">\(m\)</span> must be large enough so that a solution is guaranteed to exist, usually <span class="math inline">\(\beta \geq \sqrt{\hat{m}}\)</span> and <span class="math inline">\(m \geq \hat{m}\)</span> where <span class="math inline">\(\hat{m}\)</span> is the smallest integer greater than <span class="math inline">\(n \log q\)</span>.</li>
+</ul>
+</blockquote>
+
+<p>So overall when doing lattice-based cryptography, we will be interested into keeping the values <em>short</em>, aka. of small norm.</p>
+
+<p>Specifically, Labrador relies on the hardness of finding short solutions to linear equations over polynomial rings.</p>
+
+<p><br></p>
+
+<p>With this in mind, usually a common trick used when doing operations is to decompose the values with small bases, so that we can represent them while keeping the norm low. We will also use this in Labrador.</p>
+
+<h3>Ajtai commitments</h3>
+
+<p>We use a variant of the Ajtai commitments, where the messages are ring elements with small norms.</p>
+
+<p>For a sampled random matrix <span class="math inline">\(A \in^R R_q^{n \times m}\)</span>, and given <span class="math inline">\(x \in R^m\)</span> as input, where <span class="math inline">\(||x|| \leq \beta\)</span>, the Ajtai commitment is defined as <span class="math inline">\(cm := A \cdot x \in R_q^n\)</span>.</p>
+
+<p>In other words, Ajtai commitments are essentially MSIS instances.</p>
+
+<p>Notice that this is binding but it is not hiding, but we could make it hiding by appending a small random veector to <span class="math inline">\(x\)</span>.</p>
+
+<h2>Labrador constraints</h2>
+
+<p>As usual in SNARK schemes, we have the witness, denoted <span class="math inline">\(s= s_1, \ldots, s_r\)</span>, where each <span class="math inline">\(s_i \in R_q^n\)</span>, ie. the witness is a vector of <span class="math inline">\(r\)</span> vectors of ring elements.</p>
+
+<p>And since we&rsquo;re at the lattices world and we&rsquo;re using the assumptions of SIS and Module-SIS, the witness values are &ldquo;short&rdquo;, that is, their norm is bounded by some parameter: <span class="math inline">\(\sum_{i=1}^r || s_i ||_2^2 \leq \beta^2\)</span>.</p>
+
+<p>While in other SNARK systems we worked with constraints in the shape of R1CS or Plonkish, LaBRADOR defines its constraints as</p>
+<p><span class="math display">\[\boxed{
+f(s) = \sum_{i, j}^r a_{ij} \langle s_i, s_j \rangle + \sum_{i=1}^r \langle \phi_i, s_i \rangle + b = 0
+}
+\]</span></p><p>where <span class="math inline">\(s_i, \phi_i \in R_q^n\)</span>, and <span class="math inline">\(a_{ij}, b \in R_q\)</span>.</p>
+
+<p>There are two different families of constraints, which are evaluated differently:</p>
+
+<ul>
+<li><span class="math inline">\(\mathcal{F}\)</span> family, which are those constraints where the entire polynomial must evaluate to zero, ie. <span class="math inline">\(f(s) = 0\)</span></li>
+<li><span class="math inline">\(\mathcal{F}~'\)</span> family, which are those constraints where we&rsquo;re only interested in their constant term being zero, ie. <span class="math inline">\(ct( f'(s) ) = 0\)</span></li>
+</ul>
+
+<p>To avoid future doubts, let&rsquo;s write down what are some constant values:</p>
+
+<ul>
+<li><span class="math inline">\(r\)</span>: amount of witness vectors <span class="math inline">\(s_1, \ldots, s_r\)</span></li>
+<li><span class="math inline">\(K = |\mathcal{F}|\)</span>: amount of original constraints of fully vanishing dot products</li>
+<li><span class="math inline">\(L = |\mathcal{F}~'|\)</span>: amount of original constraints where the constant term is zero</li>
+</ul>
+
+<!--
+(HIDDEN)
+> *Side derailed observation*: since Labrador works with $\mathbb{Z}_q[X]/(X^d + 1)$, where $q, d$ are such that $X^d + 1$ splits in two irreducible factors $\pmod q$, this is a ring, the polynomial ring $R_q$.
+> 
+> But imagine for a moment (only imagine, since in many lattice-based cryptography this is not the case) that we pick $q, d$ parameters such that $X^d+1$ is irreducible, then we would have $\mathbb{Z}_q[X]/(X^d+1)$ being a finite field, $\mathbb{F}_{q^d}$; and then, the set of solutions satisfying the family $\mathcal{F}$ would be an *algebraic variety*, which is an interesting algebraic object, although not so useful in the context where we're now. But this is not the case, and in our case the $X^d+1$ that splits into two irreducible factors so that it ensures that through the protocol we can find challenges that are both computationally *short* and invertible when subtracted ([iacr:2017-523](https://eprint.iacr.org/2017/523)).
+-->
+
+<h2>Protocol</h2>
+
+<p>For the rest of this post, I&rsquo;ll use colours to easily identify the different concepts across the various equations of the protocol.</p>
+
+<p>We start from the <em>original</em> constraints. Those are both, the fully vanishing constraints of the family <span class="math inline">\(\mathcal{F}\)</span> and the constraints where the constant term is zero of the family <span class="math inline">\(\mathcal{F}~'\)</span>:</p>
+<p><span class="math display">\[
+f(s) = \sum_{i, j}^r \textcolor{magenta}{a_{ij}} \langle s_i, s_j \rangle + \sum_{i=1}^r \langle \textcolor{blue}{\phi_i}, s_i \rangle - \textcolor{orange}{b} = 0
+\]</span></p><p><span class="math display">\[
+f'(s) = \sum_{i, j}^r \textcolor{magenta}{a'_{ij}} \langle s_i, s_j \rangle + \sum_{i=1}^r \langle \textcolor{blue}{\phi'_i}, s_i \rangle - \textcolor{orange}{b'} ~~such~that~~ ct(f'(s))=0
+\]</span></p><p>In this blog post we will not cover how do we get from the R1CS constraints into the Labrador constraints shape, it can be found in the section 6 of the paper, but the main idea you need to have is that for different kinds of R1CS constraints (binary and non-binary constraints) we can obtain the <span class="math inline">\(f(s)\)</span> and <span class="math inline">\(f'(s)\)</span> Labrador constraints.</p>
+
+<p>Once we have the original constraints, the idea is to do some reductions adding some more constraints, and then do multiple aggregation steps in order to end up having fewer constraints.</p>
+
+<div style="text-align:center;">
+<img style="width:60%"
+src="img/posts/labrador/constraint-polynomials-evolution.jpg"></img>
+<br>
+<i style="color:#374072">$f(s), f'(s)$ are original polynomials, from the mentioned families $\mathcal{F}$ and $\mathcal{F}~'$ respectively,<br>
+$f_{proj}(s), f''(s)$, $F(s)$ are polynomials that we will describe in the following sections.</i>
+</div>
+
+<p><br>
+Labrador reduces proof size through four transformations unfolded over the next sections:</p>
+
+<ol>
+<li>Commit to the witness</li>
+<li>Reduce norm checking with Johnson-Lindenstrauss projections</li>
+<li>Aggregate many constraints into one</li>
+<li>Amortize openings</li>
+<li>Recurse</li>
+</ol>
+
+<h3>1. Committing to the witness</h3>
+
+<p>We name <em>inner commitments</em> the commitments to the original witness. Those commitments are</p>
+<p><span class="math display">\[cm(s_i) = t_i = A \cdot s_i \in R_q^k ~~ \forall i \in [r]\]</span></p><p>But beware, sending all those <span class="math inline">\(r\)</span> commitments would be too costly, so what the protocol does is it commits to them. The issue then is that <span class="math inline">\(t_i\)</span> (the inner commitments) have coefficients that are <span class="math inline">\(\pmod q\)</span>, whose norm would be too big. The trick that the protocol uses, is the one we mentioned at the <a href="#a-bit%20of%20background%20on%20lattices"><em>&lsquo;a bit of background on lattices&rsquo;</em> section</a>, this is, to decompose them into <span class="math inline">\(t_1 \geq 2\)</span> parts with small base <span class="math inline">\(b_1\)</span> before committing, ie.</p>
+<p><span class="math display">\[t_i = t_i^{(0)} + t_i^{(1)} b_1 + \ldots + t_i^{(t_1-1)} \cdot b_1^{t_1 -1}\]</span></p><p>with <span class="math inline">\(|| t_i^{(k)} ||_{\infty} \leq b_1/2\)</span>.</p>
+
+<p>Now, let <span class="math inline">\(t \in R_q^{r \cdot t_1 \cdot k}\)</span> be the concatenation of all decomposition parts of <span class="math inline">\(t_i^{(k)}\)</span>.</p>
+
+<p>The commitment to the original commitment, is named <em>outer commitment</em>, and it is computed as</p>
+<p><span class="math display">\[u_1 = B \cdot t\]</span></p><p>that is</p>
+<p><span class="math display">\[u_1 = \sum_{i=1}^r \sum_{k=0}^{t_1-1} B_{ik} \cdot t_i^{(k)}\]</span></p><p>with <span class="math inline">\(||t|| \leq \gamma_1\)</span> for a fixed norm parameter <span class="math inline">\(\gamma_1\)</span>.</p>
+
+<p>Now, we want to show that <span class="math inline">\(s=(s_1, \ldots, s_r)\)</span> satisfies the norm bound that we mentioned at the <a href="#setup">setup</a> section. But sending <span class="math inline">\(r\)</span> witness to the verifier would be again too costly, so the protocol reduces it through a projection.</p>
+
+<h3>The σ₋₁ trick</h3>
+
+<p>Before going forward with the protocol, we will overview a trick that Labrador uses in order to compute inner products within the polynomial ring realm.</p>
+
+<p><span class="math inline">\(\sigma_{-1}(\pi_i)\)</span> allows us to convert the coefficient-wise vector inner product into a polynomial multiplication relation.</p>
+
+<p>Within the protocol, we want to compute <span class="math inline">\(p_j = \sum_{i=1}^r \langle \pi_i^{(j)}, s_i \rangle\)</span>, but we want to compute it using ring operations, concretely using polynomial multiplication.</p>
+
+<p>Notice that in Labrador, vectors are encoded as polynomials in <span class="math inline">\(R_q\)</span>, ie</p>
+<p><span class="math display">\[a=(a_1, \ldots, a_{n}) ~\longleftrightarrow~ a(x) = \sum_{k=1}^n a_k X^k \in R_q\]</span></p><p>Let <span class="math inline">\(a(x) = \sum_k a_k X^k,~~ b(x) = \sum_k b_k X^k\)</span>, then when computing <span class="math inline">\(a(x) \cdot b(x)\)</span></p>
+<p><span class="math display">\[a(x) b(x) = (\sum_k a_k X^k) \cdot (\sum_k b_k X^k) = \sum_{i,j} a_i b_j X^{i+j}\]</span></p><p>which is different from the dot product that we&rsquo;re interested in.</p>
+
+<p>We want to only multiply together the coefficients of the equal-index terms, ie. <span class="math inline">\(a_0 b_0 + a_1 b_1 + \ldots + a_{n-1} b_{n-1}\)</span>. Thus we need some trick to force getting only the values when <span class="math inline">\(i=j\)</span>.</p>
+
+<p>The trick is with <span class="math inline">\(\sigma_{-1}\)</span> and getting the constant term of the result of multiplying <span class="math inline">\(\sigma_{-1}(a) \cdot b\)</span>.</p>
+
+<p>Define the automorphism <span class="math inline">\(\sigma_{-1}\)</span> as <span class="math inline">\(\sigma_{-1}(X) = X^{-1}\)</span>, so that <span class="math inline">\(\sigma_{-1}(a(X)) = a(X^{-1}) = \sum_i a_i X^{-i}\)</span>.</p>
+
+<p>Then, when multiplying</p>
+<p><span class="math display">\[\sigma_{-1}(a(X)) \cdot b(X) = \sum_{i,j} a_i b_j X^{j-i}\]</span></p><p>So, when <span class="math inline">\(j=i\)</span>, <span class="math inline">\(X\)</span> will be <span class="math inline">\(0\)</span>; hence the result we&rsquo;re interested in, the dot product result, will be contained in the constant terms of the result of that multiplication, where the <span class="math inline">\(X^{j-i}=X^0\)</span>.</p>
+
+<p>In other words, <span class="math inline">\(\langle a, b \rangle = ct(\sigma_{-1}(a(X)) \cdot b(X))\)</span>, where <span class="math inline">\(ct\)</span> denotes getting the constant term. That is, applied to the projection case, <span class="math inline">\(\langle \pi_i^{(j)}, s_i \rangle= ct(\sigma_{-1}(\pi_i^{(j)}) \cdot s_i)\)</span>.</p>
+
+<h3>2. Johnson-Lindenstrauss projection</h3>
+
+<p>The main idea here, is that we will use random linear projections that almost preserve the <span class="math inline">\(l_2\)</span>-norm while allowing us to reduce the amount of equations to check, while keeping the bounds in place.</p>
+
+<p>This relies on the Johnson-Lindenstrauss Lemma, which basically is used as instead of revealing all the witnes values <span class="math inline">\(s_1, \ldots, s_r\)</span>, the verifier samples a random linear map <span class="math inline">\(\Pi: \mathbb{Z}_q^{nd} \longrightarrow \mathbb{Z}_q^{256}\)</span>, and then the prover reveals only <span class="math inline">\(\Pi \cdot s\)</span>, which has many less elements than the original <span class="math inline">\(s\)</span> vector.</p>
+
+<p>And the Johnson-Lindenstrauss Lemma guarantees that <span class="math inline">\(||\Pi s||\)</span> contains almost the same norm information as <span class="math inline">\(||s||\)</span> with very high probability.</p>
+
+<p>In practice, verifier samples <span class="math inline">\(\Pi_i = (\pi_i^{(j)})_j \in \chi^{256 \times nd}\)</span>, the prover computes <span class="math inline">\(p_j = \sum_{i=1}^r \langle \pi_i^{(j)}, s_i \rangle\)</span>, and the verifier checks that <span class="math inline">\(||p|| \leq \sqrt{128} \beta\)</span>.</p>
+
+<p>So at this point, in the family <span class="math inline">\(\mathcal{F}~'\)</span>, we have the original constraints, without any projection related stuff:</p>
+<p><span class="math display">\[
+f'(s) = \sum_{i, j}^r \textcolor{magenta}{a'_{ij}} \langle s_i, s_j \rangle + \sum_{i=1}^r \langle \textcolor{blue}{\phi'_i}, s_i \rangle + \textcolor{orange}{b'} = 0
+\]</span></p><p>And the projection constraints, which encode the check for the J-L projection in the Labrador constraints shape:</p>
+
+<p>Notice that the projection equation, <span class="math inline">\(p_j = \sum_{i=1}^r \langle \sigma_{-1}(\pi_i^{(j)}), s_i \rangle\)</span> is also</p>
+<p><span class="math display">\[\sum_{i=1}^r \langle \sigma_{-1}(\pi_i^{(j)}), s_i \rangle - p_j = 0\]</span></p><p>which looks almost like the Labrador canonical constraints, we just need to add the <span class="math inline">\(a_{ij}\)</span> part. We do it by setting <span class="math inline">\(a_{ij}=0\)</span>:</p>
+<p><span class="math display">\[
+f_{proj}(s) = \sum_{i, j}^r \textcolor{magenta}{0} \cdot \langle s_i, s_j \rangle + \sum_{i=1}^r \langle \textcolor{blue}{\sigma_{-1}(\pi_i^{(j)})}, s_i \rangle - \textcolor{orange}{p_j} = 0
+\]</span></p><p>this is, we set <span class="math inline">\(\textcolor{magenta}{a_{proj,ij}=0}\)</span>, <span class="math inline">\(\textcolor{blue}{\phi_{proj,~i}=\sigma_{-1}(\pi_i^{(j)})}\)</span> and <span class="math inline">\(\textcolor{orange}{b_{proj} = -p_j}\)</span>. In this way we have the projection constraints encoded as Labrador constraints.</p>
+
+<p>Recall that both the original <span class="math inline">\(f'(s)\)</span> constraints, and the projection constraints <span class="math inline">\(f_{proj}(s)\)</span> are in the family <span class="math inline">\(\mathcal{F}~'\)</span>, so that we care about their constant term being zero, not the full polynomial vanishing.</p>
+
+<h3>3. Aggregation steps</h3>
+
+<p>At this point of the protocol, in the family <span class="math inline">\(\mathcal{F}~'\)</span>, we have <span class="math inline">\(L\)</span> original constraints <span class="math inline">\(f'(s)\)</span> and <span class="math inline">\(256\)</span> projection constraints <span class="math inline">\(f_{proj}(s)\)</span>. The idea now is to linearly combine them into fewer constraints.</p>
+
+<p>The verifier sends the challenges <span class="math inline">\(\psi^{(k)} \in^R (\mathbb{Z}_q)^L\)</span> and <span class="math inline">\(w^{(k)} \in^R (\mathbb{Z}_q)^{256}\)</span>, which the prover will use to compute the random linear combinations of the constraints we have so far, which preserves the validity while reducing the number of constraints.</p>
+
+<h4>3.1. 1st aggregation</h4>
+
+<p>The prover linearly combines</p>
+
+<ul>
+<li>the <span class="math inline">\(L\)</span> original constraints from <span class="math inline">\(f'(s)\)</span></li>
+<li>the <span class="math inline">\(256\)</span> constraints that prove the Johnson-Lindenstrauss projection, <span class="math inline">\(f_{proj}(s)\)</span></li>
+</ul>
+
+<p>as follows</p>
+<p><span class="math display">\[
+f''^{(k)}(s) =
+\sum_{l=1}^L \psi_l^{(k)} \cdot f'^{(l)}(s)
++
+\sum_{j=1}^{256} w_j^{(k)} \cdot f_{proj}(s)
+=
+\\
+= \underbrace{ \sum_{l=1}^L \psi_l^{(k)} \cdot f'^{(l)}(s) }_{(i.)~ \text{lin.comb. of the original constraints}}
++
+\underbrace{ \sum_{j=1}^{256} w_j^{(k)} \cdot ( \langle \sigma_{-1}(\pi_i^{(j)}), s_i \rangle -p_j) }_{(ii.)~ \text{lin.comb. of the 256 projection constraints}}
+\]</span></p><p>First we will tackle <span class="math inline">\((i.)\)</span>. Recall that <span class="math inline">\(f'(s) = \sum_{i, j}^r a_{ij}' \cdot \langle s_i, s_j \rangle + \sum_{i=1}^r \langle \phi_i', s_i \rangle + b'\)</span>, so by distributing the challenge <span class="math inline">\(\psi_l^{(k)}\)</span>,</p>
+<p><span class="math display">\[
+(i.):~
+\sum_l \psi_l^{(k)} \cdot f'^{(l)}(s) =
+\sum_l \psi_l^{(k)} \cdot \left(
+  \sum_{i,j} a_{ij}^{'(l)} \cdot \langle s_i, s_j \rangle
+  + \sum_i \langle \phi_i^{'(l)}, s_i \rangle - b_0^{'(k)}
+\right)\\
+=
+\underbrace{
+\sum_{i,j} \left( \sum_l \psi_l^{(k)} \cdot a_{ij}^{'(l)} \right) \cdot \langle s_i, s_j \rangle
+}_{(i.A)}
+\underbrace{
++ \sum_i \left( \sum_l \psi_l^{(k)} \cdot \phi_i^{'(l)} \right) \cdot s_i
+- \sum_l \psi_l^{(k)} \cdot b_0^{'(l)}
+}_{(i.B)}
+\]</span></p><p>For the <span class="math inline">\((i.A)\)</span> part, we can set</p>
+<p><span class="math display">\[\textcolor{magenta}{a_{ij}^{''(k)}} = \sum_{l=1}^L \psi_l^{(k)} \cdot a_{ij}^{'(l)}\]</span></p><p>so that:</p>
+<p><span class="math display">\[
+(i.A):~
+ \sum_{i,j} \left( \sum_l \psi_l^{(k)} \cdot a_{ij}^{'(l)} \right) \cdot \langle s_i, s_j \rangle ~=~ \sum_{i,j} \textcolor{magenta}{a''^{(k)}_{ij}} \cdot \langle s_i, s_j \rangle
+\]</span></p><p>Now tackle <span class="math inline">\((ii.)\)</span>:</p>
+<p><span class="math display">\[
+(ii.):~ \sum_{j=1}^{256} w_j^{(k)} \cdot \big( \langle \sigma_{-1}(\pi_i^{(j)}), s_i \rangle - p_j \big) = \sum_i \langle \sum_j w_j^{(k)} \sigma_{-1}(\pi_i^{(j)}),~ s_i \rangle
+- \sum_j w_j^{(k)} \cdot p_j
+\]</span></p><p>Now let&rsquo;s put together <span class="math inline">\((i.B)\)</span> and <span class="math inline">\((ii)\)</span>:</p>
+<p><span class="math display">\[
+\overbrace{
+  \textcolor{green}{
+    \sum_i ( \sum_l \psi_l^{(k)} \cdot \phi_i^{'(l)} ) \cdot s_i
+  }
+  \textcolor{blue}{
+    - \sum_l \psi_l^{(k)} \cdot b_0^{'(l)}
+  }
+}^{(i.B)}
++ 
+\overbrace{
+  \textcolor{orange}{
+    \sum_i \langle \sum_j w_j^{(k)} \sigma_{-1}(\pi_i^{(j)}),~ s_i \rangle
+  }
+  \textcolor{red}{
+    - \sum_j w_j^{(k)} \cdot p_j
+  }
+}^{(ii.)}
+=\\~\\
+=
+  \sum_i
+\textcolor{green}{
+    \big\langle 
+    \sum_l \psi_l^{(k)} \cdot \phi_i^{'(l)}
+  }
+  +
+  \textcolor{orange}{
+    \sum_l w_j^{(k)} \cdot \sigma_{-1}(\pi_i^{(j)}), s_i
+    \big\rangle
+  }
+  +
+  \textcolor{blue}{
+    \sum_l \psi_l^{(k)} \cdot b_0^{'(l)}
+  }
+  +
+  \textcolor{red}{
+    \sum_j w_j^{(k)} \cdot p_j
+  }
+\]</span></p><p>without colors:</p>
+<p><span class="math display">\[
+=
+\sum_i
+  \big\langle 
+  \underbrace{
+    \sum_l \psi_l^{(k)} \cdot \phi_i^{'(l)}
+    +
+    \sum_l w_j^{(k)} \cdot \sigma_{-1}(\pi_i^{(j)})
+    }_{\phi_i^{''(k)}},
+    s_i
+  \big\rangle
+  +
+  \underbrace{
+    \sum_l \psi_l^{(k)} \cdot b_0^{'(l)}
+    +
+    \sum_j w_j^{(k)} \cdot p_j
+  }_{b_0^{''(k)} ~\text{(constant term)}}
+  \\
+  =
+  \sum_{i=1}^r \langle \textcolor{blue}{\phi_i^{''(k)}}, s_i \rangle - \textcolor{orange}{b_0^{''(k)}}
+\]</span></p><p>So by putting it together with the <span class="math inline">\((i.A)\)</span> part, we get the full <span class="math inline">\(f''^{(k)}(s)\)</span> aggregated constraint:</p>
+<p><span class="math display">\[
+\boxed{
+f''^{(k)}(s) =
+\overbrace{
+\sum_{i,j=1}^r \textcolor{magenta}{a_{ij}^{''(k)}} \cdot \langle s_i, s_j \rangle
+}^{(i.A)}
++
+\overbrace{
+\sum_{i=1}^r \langle \textcolor{blue}{\phi_i^{''(k)}}, s_i \rangle - \textcolor{orange}{b_0^{''(k)}}
+}^{(i.B) + (ii.)}
+}
+\]</span></p><p>such that <span class="math inline">\(ct(f''^{(k)}(s)) = 0\)</span>.</p>
+
+<p><br></p>
+
+<p>Right now, <span class="math inline">\(f''^{(k)}(s)\)</span> is a constraint where only the constant term evaluates to zero (ie. it is a constraint from the <span class="math inline">\(\mathcal{F}'\)</span> family). However, for the next aggregation step, we need it to be a <em>completely vanishing</em> polynomial, that is, a function from the <span class="math inline">\(\mathcal{F}\)</span> family.</p>
+
+<p>To do so, the prover takes the integer constant <span class="math inline">\(\textcolor{orange}{b_0^{''(k)}}\)</span> and extends it into a full polynomial <span class="math inline">\(\textcolor{orange}{b''^{(k)}}\)</span> so that the newly formed function <span class="math inline">\(f''^{(k)}(s)\)</span> evaluates exactly to zero. The prover then sends these full <span class="math inline">\(b''^{(k)}\)</span> polynomials to the verifier.</p>
+
+<p>To ensure that the prover isn&rsquo;t cheating by just making up a polynomial that matches the equation, the verifier will check that the constant coefficient of the prover&rsquo;s <span class="math inline">\(b''^{(k)}\)</span> corresponds to the <span class="math inline">\(b_0^{''(k)}\)</span> value that the verifier computes from the public values and challenges, that is <span class="math inline">\(b_0^{''(k)} \stackrel{?}{=} \langle w^{(k)}, p \rangle + \sum_{l=1}^L \psi_l^{(k)} b_0^{'(l)}\)</span>.</p>
+
+<p><br></p>
+
+<p>Recall that along these past steps, we&rsquo;ve defined the new <span class="math inline">\(a_{ij}^{''(k)},~ \phi_i^{''(k)},~ b''\)</span> as</p>
+<p><span class="math display">\[\textcolor{magenta}{a_{ij}^{''(k)}} = \sum_{l=1}^L \psi_l^{(k)} \cdot \textcolor{magenta}{a_{ij}^{'(l)}}\]</span></p><p><span class="math display">\[\textcolor{blue}{\phi_i^{''(k)}} = \sum_{l=1}^L \psi_l^{(k)} \textcolor{blue}{\phi_i^{'(l)}} + \sum_{j=1}^{256} w_j^{(k)} \cdot \sigma_{-1}(\textcolor{blue}{\pi_i^{(j)}})\]</span></p><p><span class="math display">\[\textcolor{orange}{b''} = \sum_{i,j=1}^r \textcolor{magenta}{a_{ij}^{''(k)}} \cdot \langle s_i, s_j \rangle + \sum_{i=1}^r \langle \textcolor{blue}{\phi_i^{''(k)}}, s_i \rangle\]</span></p>
+<h4>3.2. 2nd aggregation</h4>
+
+<p>Till here, the 1st aggregation step has taken a random linear combination of the original constant-vanishing constraints and the projection constraints, and linearly combined them into Labrador-shaped constraints.</p>
+
+<p>Now the idea is to random linearly combine the original fully vanishing constraints <span class="math inline">\(f(s)\)</span>, and separately the aggregated <span class="math inline">\(f''(s)\)</span> constraints that come from the original constant-vanishing constraints (<span class="math inline">\(f'(s)\)</span>) and projection constraints (<span class="math inline">\(f_{proj}(s)\)</span>).</p>
+
+<p>The verifier sends the challenges <span class="math inline">\(\alpha \in^R R_q^K,~ \beta \in^R R_q^{\lceil 128/\log{q} \rceil}\)</span>.</p>
+
+<p>Then the prover will compute</p>
+<p><span class="math display">\[
+F(s) = \sum_{k=1}^K \alpha_k \cdot f^{(k)}(s) + \sum_{k=1}^{\lceil 128/ \log q \rceil} \beta_k \cdot f''^{(k)}\\
+=
+\sum_{k=1}^K \alpha_k \cdot \left( \sum_{i, j}^r a_{ij} \langle s_i, s_j \rangle + \sum_{i=1}^r \langle \phi_i, s_i \rangle + b \right)
++
+\sum_{k=1}^{\lceil 128/ \log q \rceil} \beta_k \cdot
+\left(
+  \sum_{i,j}^r a_{ij}^{''(k)} \langle s_i, s_j \rangle + \sum_i^r \langle \phi_i^{''(k)}, s_i \rangle - b_0^{''(k)}
+\right)
+\]</span></p><p>distribute <span class="math inline">\(\alpha_k\)</span> and <span class="math inline">\(\beta_k\)</span> while keeping the witness values separated</p>
+<p><span class="math display">\[
+= \sum_{i,j=1}^r
+\underbrace{
+  \left( \sum_{k=1}^K \alpha_k a_{ij}^{(k)}
+  +
+  \sum_{k=1}^{\lceil 128/\log q \rceil} \beta_k a_{ij}''^{(k)}
+  \right)
+}_{a_{ij}}
+\langle s_i, s_j \rangle + \sum_{i=1}^r \langle \underbrace{ \left( \sum_{k=1}^K \alpha_k \phi_i^{(k)} + \sum_{k=1}^{\lceil 128/\log q \rceil} \beta_k \phi_i''^{(k)} \right) }_{\phi_i}, s_i \rangle
+\\
+- \underbrace{ \left( \sum_{k=1}^K \alpha_k b^{(k)} + \sum_{k=1}^{\lceil 128/\log q \rceil} \beta_k b''^{(k)} \right) }_{b}
+\]</span></p><p><span class="math display">\[
+\boxed{
+  F(s) = \sum_{i,j} a_{ij} \langle s_i, s_j \rangle + \sum_i \langle \phi_i, s_i \rangle - b
+}
+\]</span></p><p>again, a Labrador-shaped constraint, which in this case encodes the linear combinations of the original <span class="math inline">\(f^{(k)}(s)\)</span> constraints and the <span class="math inline">\(f''^{(k)}(s)\)</span> aggregated constraints, which for a valid witness it satisfies <span class="math inline">\(F(s)=0\)</span>.</p>
+
+<h3>4. Amortization</h3>
+
+<p>Now, at this point we have <span class="math inline">\(r\)</span> witness vectors, which in practice it is too much to deal with. Thus, instead of opening the individual inner commitments <span class="math inline">\(t_i\)</span> by sending all the <span class="math inline">\(s_i\)</span> and then checking the constraint <span class="math inline">\(F(s)\)</span>, the prover opens a random linear combination</p>
+<p><span class="math display">\[z = \sum_{i=1}^r c_i \cdot s_i\]</span></p><p>and its respective committed version</p>
+<p><span class="math display">\[\overline{z} = \sum_{i=1}^r c_i \cdot t_i\]</span></p><p>with challenge polynomials <span class="math inline">\(c_i \in R_q\)</span>.</p>
+
+<p>Then the verifier checks</p>
+<p><span class="math display">\[A \cdot z = \sum_{i=1}^r c_i \cdot t_i\]</span></p><p>which should match since <span class="math inline">\(t_i\)</span> are the commitments to <span class="math inline">\(s_i\)</span> such that <span class="math inline">\(t_i = A s_i\)</span>, so that</p>
+<p><span class="math display">\[A \cdot z = A \cdot \sum_i^r c_i s_i = \sum_i c_i \cdot (A s_i) = \sum_i c_i t_i\]</span></p><p>And also checks that <span class="math inline">\(||z|| \leq \gamma\)</span> which comes from the instantiation parameters, to ensure small norm.</p>
+
+<p><br></p>
+
+<p>The following step is verifying that <span class="math inline">\(F(s)=0\)</span>, but recall that <span class="math inline">\(F(s) = \sum_{i,j} a_{ij} \langle s_i, s_j \rangle + \sum_i \langle \phi_i, s_i \rangle - b\)</span>, and the verifier does not know the values of <span class="math inline">\(s_i\)</span> hence can not compute it.</p>
+
+<p>To do the check, both prover and verifier use what the paper calls <em>garbage polynomials</em>, but intuitively we can think about them as some auxiliary polynomials to do this final check.</p>
+
+<p>Let the <em>garbage polynomials</em> be</p>
+<p><span class="math display">\[g_{ij}= \langle s_i, s_j \rangle,~~~~ h_{ij} = \frac{1}{2} ( \langle \phi_i, s_j \rangle + \langle \phi_j, s_i \rangle )\]</span></p><p>for <span class="math inline">\(i,j \in [r]\)</span>.</p>
+
+<p>The prover will commit to those polynomials early on, before the challenges <span class="math inline">\(c_i\)</span> are generated, so that the prover is not able to select the garbage polynomials based on knowledge of the challenges, which would allow the prover to cheat.</p>
+
+<blockquote>
+<p>Observation: the paper does the commitment to the &ldquo;garbage&rdquo; polynomials <span class="math inline">\(g\)</span> and <span class="math inline">\(h\)</span> differently at the protocol conceptual explanation of page 14 and at the protocol description of Figure 2 at page 17.</p>
+
+<p>The conceptual explanation describes the second outer commitment <span class="math inline">\(u_2\)</span> as</p>
+<p><span class="math display">\[u_2 = C g + D h\]</span></p><p>but later at the protocol description, the commitment to <span class="math inline">\(g\)</span> is moved to the outer commitment <span class="math inline">\(u_1\)</span>, leaving only the commitment to <span class="math inline">\(h\)</span> at <span class="math inline">\(u_2\)</span>. So the outer commitments end up being</p>
+<p><span class="math display">\[u_1 = B \cdot t + C \cdot g = \sum_{i=1}^r \sum_{k=0}^{t_1-1} B_{ik} t_i^{(k)} + \sum_{i \leq j} \sum_{k=0}^{t_2-1} C_{ijk} g_{ij}^{(k)}\]</span></p><p><span class="math display">\[u_2 = D \cdot h = \sum_{i \leq j} \sum_{k=0}^{t_1-1} D_{ijk} h_{ij}^{(k)}\]</span></p><p>This is done because the <span class="math inline">\(g_{ij}\)</span> polynomials are independent of all challenges, thus they can be computed at the very beginning of the protocol and included in <span class="math inline">\(u_1\)</span>, allowing a slightly better security proof.</p>
+</blockquote>
+
+<p>Then, the verifier will do the following checks:</p>
+<p><span class="math display">\[(i.)~~~ &lt;z, z&gt; = \sum_{i,j=1}^r g_{ij} c_i c_j\]</span></p><p><span class="math display">\[(ii.)~~~ \sum_{i=1}^r \langle \phi_i, z \rangle \cdot c_i = \sum_{i,j=1}^r h_{ij} c_i c_j\]</span></p><p><span class="math display">\[(iii.)~~~ \sum_{i,j=1}^r a_{ij} g_{ij} + \sum_{i=1}^r h_{ii} -b = 0\]</span></p><p>Where <span class="math inline">\((i.)\)</span> and <span class="math inline">\((ii.)\)</span> are to check the correctness of <span class="math inline">\(g_{ij}\)</span> and <span class="math inline">\(h_{ij}\)</span> respectively, and <span class="math inline">\((iii.)\)</span> is checking the <span class="math inline">\(F(s)=0\)</span> equality through the garbage polynomials <span class="math inline">\(g_{ij}, h_{ij}\)</span>.</p>
+
+<h3>5. Recursion</h3>
+
+<p>At this point, the prover has sent the <em>proof</em> which consists of <span class="math inline">\((z, t, h, g)\)</span>, and the norm checks get grouped into a single norm check <span class="math inline">\(||z||^2 + ||t||^2 + ||g||^2 + ||h||^2 \leq \gamma^2 + \gamma_1^2 + \gamma_2^2\)</span>.</p>
+
+<p>The idea now, is to recurse, encoding the protocol checks into new Labrador constraints, and then performing again the protocol.</p>
+
+<p>First, we simplify the target relation, let <span class="math inline">\(v = t || g || h \in R_q^m\)</span>, so that the norm check becomes</p>
+<p><span class="math display">\[||z||^2 + ||v||^2 \leq \gamma^2 + \gamma_1^2 + \gamma_2^2\]</span></p><p>Now we decompose the witness <span class="math inline">\(z = z^{(0)} + b \cdot z^{(1)}\)</span>, with <span class="math inline">\(z^{(0)}, z^{(1)} \in R_q^n\)</span>, to keep the coefficients with small norm.</p>
+
+<p>Then, the quadratic dot product becomes</p>
+<p><span class="math display">\[\langle z, z \rangle = \langle z^{(0)}, z^{(0)} \rangle + 2b \langle z^{(0)}, z^{(1)} \rangle + b^2 \langle z^{(1)}, z^{(1)} \rangle\]</span></p><p>and we can do the norm check as <span class="math inline">\(||z^{(0)}||^2 + ||z^{(1)}||^2 + ||v||^2 \leq \frac{2}{b^2} \gamma^2 + \gamma_1^2 + \gamma_2^2 = (\beta')^2\)</span>, which implies <span class="math inline">\(||z|| = ||z^{(0)} + b z^{(1)} || \leq (1+b)\beta'\)</span>.</p>
+
+<p>Write the vectors <span class="math inline">\(z^{(0)}, z^{(1)}, v\)</span> as concatenations of vectors:</p>
+<p><span class="math display">\[
+z^{(0)} = s_1 || s_2 || \ldots || s_{\nu}\\
+z^{(1)} = s_{\nu+1} || \ldots || s_{2\nu}\\
+v = s_{2\nu+1} || \ldots || s_{2\nu+ \mu}
+\]</span></p><p>that is <span class="math inline">\(r' = 2 \nu + \mu\)</span> vectors in total.</p>
+
+<p>Observe that the final verifications from the previous section, the checks <span class="math inline">\((i.),~ (ii.),~ (iii.)\)</span> can be done as dot product constraints (ie. Labrador constraints):</p>
+
+<h4>encoding check (i.)</h4>
+
+<p>from the check <span class="math inline">\((i.)\)</span>, <span class="math inline">\(\langle z, z \rangle = \sum_{i,j=1}^r g_{ij} \cdot c_i \cdot c_j\)</span>, since we&rsquo;ve decomposed <span class="math inline">\(z = z^{(0)} + b z^{(1)}\)</span> then we have</p>
+<p><span class="math display">\[
+\langle z, z \rangle = \langle z^{(0)} + b z^{(1)}, z^{(0)} + b z^{(1)} \rangle\\
+= \langle z^{(0)}, z^{(0)} \rangle + 2b \langle z^{(0)}, z^{(1)} \rangle + b^2 \langle z^{(1)}, z^{(1)} \rangle
+\]</span></p><p>that is, three separate dot products. Then we place</p>
+<p><span class="math display">\[
+z^{(0)} ~\text{into}~ s_1', \ldots, s'_{\nu}\\
+z^{(1)} ~\text{into}~ s_{\nu+1}', \ldots, s'_{2\nu}
+\]</span></p><p>so that</p>
+<p><span class="math display">\[\langle z^{(0)}, z^{(0)} \rangle = \langle s_1', s_1' \rangle + \langle s_2', s_2' \rangle + \ldots + \langle s_{\nu}', s_{\nu}' \rangle\]</span></p><p>and similarly with <span class="math inline">\(\langle z^{(1)}, z^{(1)} \rangle\)</span></p>
+<p><span class="math display">\[\langle z^{(1)}, z^{(1)} \rangle = \langle s_{\nu+1}', s_{\nu+1}' \rangle + \ldots + \langle s_{2\nu}', s_{2\nu}' \rangle\]</span></p><p>and</p>
+<p><span class="math display">\[\langle z^{(0)}, z^{(1)} \rangle = \langle s_1', s_{\nu+1}' \rangle + \langle s_2', s_{\nu+2}' \rangle + \ldots + \langle s_{\nu}', s_{2\nu}' \rangle\]</span></p><p>So that now, it is a matter of setting appropriate <span class="math inline">\(a_{ij}\)</span> values to reshape the original check into a Labrador-shaped constraint:</p>
+
+<ul>
+<li>from <span class="math inline">\(1\)</span> to <span class="math inline">\(\nu\)</span>: if <span class="math inline">\(i=j\)</span>, set <span class="math inline">\(a_{ij}=1,~ 0\)</span> otherwise,</li>
+<li>from <span class="math inline">\(\nu+1\)</span> to <span class="math inline">\(2\nu\)</span>: if <span class="math inline">\(i=j\)</span>, set <span class="math inline">\(a_{ij}=b^2,~ 0\)</span> otherwise,</li>
+<li>from <span class="math inline">\(2\nu\)</span> to <span class="math inline">\(2\nu+\mu\)</span>: if <span class="math inline">\(j=i+\nu\)</span>, set <span class="math inline">\(a_{ij}=b\)</span>. And since the <span class="math inline">\((a_{ij})\)</span> matrix is symmetric, then <span class="math inline">\(a_{ji}=b\)</span>, which implies that when both combined we get <span class="math inline">\(2b\)</span>.</li>
+</ul>
+
+<p>Therefore, we can perform the <span class="math inline">\(\langle z, z \rangle\)</span> with the decompositions <span class="math inline">\(z^{(0)},~ z^{(1)}\)</span>.</p>
+
+<h4>encoding check (ii.)</h4>
+
+<p>The next check is <span class="math inline">\((ii.)\)</span>, <span class="math inline">\(\sum_{i=1}^r \langle \phi_i, z \rangle \cdot c_i = \sum_{i, j = 1}^r h_{ij} c_i c_j\)</span>. Reshape it into</p>
+<p><span class="math display">\[\sum_{i=1}^r \langle \phi_i \cdot c_i, z \rangle - \sum_{i, j = 1}^r (c_i c_j)\cdot h_{ij} = 0\]</span></p><p>and, recall that we set</p>
+<p><span class="math display">\[
+z^{(0)} = s_1 || s_2 || \ldots || s_{\nu}\\
+z^{(1)} = s_{\nu+1} || \ldots || s_{2\nu}\\
+v = s_{2\nu+1} || \ldots || s_{2\nu+ \mu}
+\]</span></p><p>also recall that <span class="math inline">\(v=t || g || h\)</span>. Thus, similarly as for the check <span class="math inline">\((i.)\)</span>,</p>
+
+<ul>
+<li>from <span class="math inline">\(1\)</span> to <span class="math inline">\(\nu\)</span>: <span class="math inline">\(\phi_i^{(k)} = \sum \phi_i c_i\)</span>,</li>
+<li>from <span class="math inline">\(\nu+1\)</span> to <span class="math inline">\(2\nu\)</span>: <span class="math inline">\(\phi_i^{(k)} = \sum \phi_i c_i \cdot b\)</span>,</li>
+<li>from <span class="math inline">\(2\nu\)</span> to <span class="math inline">\(2\nu+\mu\)</span>: <span class="math inline">\(\phi_i^{(k)} = - (c_i c_j)\)</span>.</li>
+</ul>
+
+<h4>encoding check (iii.)</h4>
+
+<p>For the check <span class="math inline">\((iii.)\)</span>, <span class="math inline">\(\sum a_{ij} g_{ij} + \sum h_{ii} - b =0\)</span>, recall again that <span class="math inline">\(g_{ij}, h_{ij}\)</span> are inside <span class="math inline">\(v\)</span>, so it is just a matter of setting <span class="math inline">\(a_{ij}=a_{ij}\)</span> and <span class="math inline">\(a_{ij}=1\)</span> at their corresponding positions, and <span class="math inline">\(b^{(k)}=b\)</span>.</p>
+
+<p>With this, we can encode the checks <span class="math inline">\((i.),~ (ii.),~ (iii.)\)</span> into the Labraddor constraint shape</p>
+<p><span class="math display">\[g^{(k)}(s') = \sum_{i,j=1}^{r'} a_{ij}^{(k)} \langle s_i', s_j' \rangle + \sum_i^{r'} \langle \phi_i^{(k)}, s_i' \rangle - b^{(k)} = 0\]</span></p><p>with <span class="math inline">\(s' := z^{(0)} || z^{(1)} || v\)</span>, where <span class="math inline">\(v=t ||g||h\)</span>.</p>
+
+<h4>encoding commitments checks</h4>
+
+<p>Similarly we encode he commitments checks. We had <span class="math inline">\(Az = \sum c_i t_i\)</span>, which we can do in a dot product constraint as</p>
+<p><span class="math display">\[\langle A_{row}, z \rangle - \sum c_i \cdot ~ (t_i)_{row} = 0\]</span></p><p>which in a similar fashion as the checks <span class="math inline">\((i.), (ii.), (iii.)\)</span>, we can reshape it into a Labrador constraint, since the inner commitments <span class="math inline">\(t_i\)</span> are placed inside <span class="math inline">\(v\)</span>.</p>
+
+<p><br></p>
+
+<p>And for the outer commitments <span class="math inline">\(u_1,~ u_2\)</span>, as we saw in the section [<a href="#4.-amortization">4. Amortization</a>] we want</p>
+<p><span class="math display">\[
+u_1 = B \cdot t + C \cdot g\\
+u_2 = D \cdot h
+\]</span></p><p>which we can encode as</p>
+<p><span class="math display">\[
+\langle B_{row}, t \rangle + \langle C_{row}, g \rangle = (u_1)_{row}\\
+\langle D_{row}, h \rangle = (u_2)_{row}
+\]</span></p><p>which, as before, we can also reshape into the dot product Labrador constraints.</p>
+
+<p><br></p>
+
+<p>The paper mentions that <a href="https://giphy.com/gifs/67-six-seven-john-chungus-08uBcURaMq6vA93TGc">6 or 7</a> iterations of the recursive protocol give the best results, where at each recursion the witness shrinks down from <span class="math inline">\(|s^{(i)}|\)</span> into <span class="math inline">\(|s^{(i)}|^{2/3}\)</span>.</p>
+
+<h2>Conclusions</h2>
+
+<p>It has been very interesting to see how a lattice-based SNARK works, its machinery and tricks.
+Also, Labrador is of special interest because it was a big step forward on lattice-based SNARKs since it has good proof sizes; asymptotically of <span class="math inline">\(\mathcal{O}(\log n)\)</span>, and for <span class="math inline">\(2^{16}\)</span> R1CS constraints, the paper reports proof sizes of 54 kbytes.</p>
+
+<div style="text-align:center;">
+<a target="_blank" href="img/posts/labrador/proof-sizes-table.png">
+  <img style="width:80%"
+  src="img/posts/labrador/proof-sizes-table.png"></img>
+</a>
+<br>
+<i style="color:#374072">table from the Labrador paper</i>
+</div>
+
+<p><br></p>
+
+<p>An interesting thing in Labrador is the capacity to mix binary and non-binary R1CS constraints, which get reshaped into the <span class="math inline">\(f(s)\)</span> and <span class="math inline">\(f'(s)\)</span> Labrador constraints. This is nice, because for many zk-circuits we want to prove binary-based operations (such as traditional hashes), while doing arithmetic logic, and in Labrador we can mix both in parallel.</p>
+
+<p>Other post-quantum safe SNARK schemes are based on hashes (eg. STARKs), widely used in the industry; but what seems interesting of the lattice-based cryptography is that lattices have more algebraic structure, and while a bit less developed in production than hash based proofs, they have interesting potential.</p>
+
+<p>I&rsquo;ve enjoyed studying Labrador, and definitely I&rsquo;ll keep exploring other lattice-based schemes while also going a bit down to the math behind them.</p>
+
+    </div>
+
+    <footer style="text-align:center; margin-top:100px;margin-bottom:50px;">
+      <div class="container">
+        <br>
+        <a href="/blog">Go to main</a>
+        <br><br>
+        <div class="row">
+          <ul class="list-inline">
+            <li><a href="https://twitter.com/arnaucube"
+                   style="color:gray;text-decoration:none;"
+                   target="_blank">twitter.com/arnaucube</a>
+            </li>
+            <li><a href="https://github.com/arnaucube"
+                   style="color:gray;text-decoration:none;"
+                   target="_blank">github.com/arnaucube</a>
+            </li>
+          </ul>
+        </div>
+        <div class="row" style="display:inline-block;">
+          Blog made with <a href="http://github.com/arnaucube/blogo/"
+                            target="_blank" style="color: gray;text-decoration:none;">Blogo</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+    </script>
+    <script src="js/external-links.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script defer src="js/katex/katex.min.js"></script>
+    <script defer src="js/katex/auto-render.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          displayMode: false,
+          // customised options
+          // • auto-render specific keys, e.g.:
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "\\(", right: "\\)", display: false},
+            {left: "\\begin{equation}", right: "\\end{equation}", display: true}
+          ],
+          // • rendering keys, e.g.:
+          throwOnError : true
+        });
+      });
+
+      ///
+      let theme = localStorage.getItem("theme");
+      if ((theme === "light-theme")||(theme==null)) {
+          theme = "light-theme";
+          document.getElementById("themeSwitcher").checked = false;
+      } else if (theme === "dark-theme") {
+          theme = "dark-theme";
+          document.getElementById("themeSwitcher").checked = true;
+      }
+      document.body.className = theme;
+      localStorage.setItem("theme", theme);
+
+      function switchTheme() {
+        theme = localStorage.getItem("theme");
+        if (theme === "light-theme") {
+          theme = "dark-theme";
+          document.getElementById("themeSwitcher").checked = true;
+        } else {
+          theme = "light-theme";
+          document.getElementById("themeSwitcher").checked = false;
+        }
+        document.body.className = theme;
+        localStorage.setItem("theme", theme);
+
+        console.log(theme);
+      }
+    </script>
+    <script>
+    function tagLinks(tagName) {
+      var tags = document.getElementsByTagName(tagName);
+      for (var i=0, hElem; hElem =  tags[i]; i++) {
+        if (hElem.parentNode.className=="row postThumb") {
+          continue;
+        }
+        hElem.id = hElem.innerHTML.toLowerCase().replace(" ", "-");
+        hElem.innerHTML = "<a style='color:black!important;' href='#"+hElem.id+"'>"+hElem.innerHTML+"</a>";
+      }
+    }
+    tagLinks("h2");
+    tagLinks("h3");
+    tagLinks("h4");
+    tagLinks("h5");
+    </script>
+    <script>
+function generateTOC(tocContainerId = "toc") {
+    const tocContainer = document.getElementById(tocContainerId);
+    if (!tocContainer) return;
+
+    const headings = document.querySelectorAll("h2, h3, h4, h5, h6");
+    if (!headings.length) return;
+
+    // Generate IDs if missing
+    headings.forEach((heading, index) => {
+        if (!heading.id) {
+            heading.id =
+                heading.textContent
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^\w\s-]/g, "")
+                    .replace(/\s+/g, "-") +
+                "-" +
+                index;
+        }
+    });
+
+    const toc = document.createElement("ul");
+    let currentLevel = 1;
+    let currentList = toc;
+    const stack = [toc];
+
+    headings.forEach((heading) => {
+        const level = parseInt(heading.tagName.substring(1), 10);
+
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+
+        a.href = "#" + heading.id;
+        a.textContent = heading.textContent;
+
+        li.appendChild(a);
+
+        if (level > currentLevel) {
+            for (let i = currentLevel; i < level; i++) {
+                const nestedList = document.createElement("ul");
+
+                const lastLi =
+                    currentList.lastElementChild ||
+                    currentList.appendChild(document.createElement("ul"));
+
+                lastLi.appendChild(nestedList);
+
+                stack.push(nestedList);
+                currentList = nestedList;
+            }
+        } else if (level < currentLevel) {
+            for (let i = currentLevel; i > level; i--) {
+                stack.pop();
+            }
+            currentList = stack[stack.length - 1];
+        }
+
+        currentList.appendChild(li);
+        currentLevel = level;
+    });
+
+    tocContainer.innerHTML = "";
+    tocContainer.appendChild(toc);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    generateTOC();
+});
+    </script>
+    <script src="js/mermaid.min.js"></script>
+
+  </body>
+</html>
+

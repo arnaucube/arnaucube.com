@@ -62,7 +62,25 @@
 
 
     <div class="container" style="margin-top:0px;max-width:800px;">
-      <a href='/blog/ai-connections.html'><div class="row postThumb">
+      <a href='/blog/labrador.html'><div class="row postThumb">
+        <h3>Notes on Labrador, a lattice-based SNARK scheme</h3>
+
+<p>Overview of how the (post-quantum) lattice-based SNARK scheme &ldquo;Labrador&rdquo; works.</p>
+
+<p><em>2026-06-11</em></p>
+
+</div>
+
+</a><a href='/blog/tools.html'><div class="row postThumb">
+        <h3>Tools</h3>
+
+<p>A non-exhaustive overview of tools I use daily.</p>
+
+<p><em>2026-06-08</em></p>
+
+</div>
+
+</a><a href='/blog/ai-connections.html'><div class="row postThumb">
         <h3>Human connections in the early days of AI</h3>
 
 <p>A short note on aiccelerationism, hyperreality, and the recovery of human connections.</p>
@@ -285,7 +303,7 @@ ProtoGalaxy is a <em>folding scheme</em> which iterates on ideas from ProtoStar 
           continue;
         }
         hElem.id = hElem.innerHTML.toLowerCase().replace(" ", "-");
-        hElem.innerHTML = "<a style='text-decoration:none;color:black;' href='#"+hElem.id+"'>"+hElem.innerHTML+"</a>";
+        hElem.innerHTML = "<a style='color:black!important;' href='#"+hElem.id+"'>"+hElem.innerHTML+"</a>";
       }
     }
     tagLinks("h2");
@@ -293,8 +311,77 @@ ProtoGalaxy is a <em>folding scheme</em> which iterates on ideas from ProtoStar 
     tagLinks("h4");
     tagLinks("h5");
     </script>
-    <script src="js/mermaid.min.js"></script>
+    <script>
+function generateTOC(tocContainerId = "toc") {
+    const tocContainer = document.getElementById(tocContainerId);
+    if (!tocContainer) return;
 
+    const headings = document.querySelectorAll("h2, h3, h4, h5, h6");
+    if (!headings.length) return;
+
+    // Generate IDs if missing
+    headings.forEach((heading, index) => {
+        if (!heading.id) {
+            heading.id =
+                heading.textContent
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^\w\s-]/g, "")
+                    .replace(/\s+/g, "-") +
+                "-" +
+                index;
+        }
+    });
+
+    const toc = document.createElement("ul");
+    let currentLevel = 1;
+    let currentList = toc;
+    const stack = [toc];
+
+    headings.forEach((heading) => {
+        const level = parseInt(heading.tagName.substring(1), 10);
+
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+
+        a.href = "#" + heading.id;
+        a.textContent = heading.textContent;
+
+        li.appendChild(a);
+
+        if (level > currentLevel) {
+            for (let i = currentLevel; i < level; i++) {
+                const nestedList = document.createElement("ul");
+
+                const lastLi =
+                    currentList.lastElementChild ||
+                    currentList.appendChild(document.createElement("ul"));
+
+                lastLi.appendChild(nestedList);
+
+                stack.push(nestedList);
+                currentList = nestedList;
+            }
+        } else if (level < currentLevel) {
+            for (let i = currentLevel; i > level; i--) {
+                stack.pop();
+            }
+            currentList = stack[stack.length - 1];
+        }
+
+        currentList.appendChild(li);
+        currentLevel = level;
+    });
+
+    tocContainer.innerHTML = "";
+    tocContainer.appendChild(toc);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    generateTOC();
+});
+    </script>
+    <script src="js/mermaid.min.js"></script>
 
   </body>
 </html>

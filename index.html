@@ -164,6 +164,10 @@
 
       <br><br>
       <div style="margin:30px;">
+        Cryptography engineer with experience implementing cryptography protocols (zkSNARKs, hashes, ciphers, folding schemes, zk-circuits, ...).
+        On my free time I enjoy self-studying <a target="_blank" href="/blog/notes.html">some math topics</a>.
+
+        <br><br><br>
         Some of the projects I've enjoyed working on over these past years:<br>
         <ul>
           <li>
@@ -171,15 +175,15 @@
         <a href="https://github.com/privacy-ethereum/sonobe" target="_blank">Sonobe</a> library
           </li>
           <li>
+            Elliptic curve <i>signature schemes</i> such as
+        <a href="https://github.com/arnaucube/ring-signatures-rs" target="_blank">bLSAG ring signatures</a>
+        and <a href="https://github.com/aragonzkresearch/ark-ec-blind-signatures" target="_blank">blind signatures</a>
+          </li>
+          <li>
             <i>Commitment schemes</i> such as
         <a href="https://github.com/arnaucube/kzg-commitments-study" target="_blank">KZG10</a>,
         <a href="https://github.com/arnaucube/fri-commitment" target="_blank">FRI</a>,
         <a href="https://github.com/arnaucube/ipa-rs" target="_blank">IPA</a>
-          </li>
-          <li>
-            Elliptic curve <i>signature schemes</i> such as
-        <a href="https://github.com/arnaucube/ring-signatures-rs" target="_blank">bLSAG ring signatures</a>
-        and <a href="https://github.com/aragonzkresearch/ark-ec-blind-signatures" target="_blank">blind signatures</a>
           </li>
           <li>
             other <i>cryptographic primitives</i> such as
@@ -191,10 +195,11 @@
             zk <i>circuits</i> such as <a
           href="https://github.com/vocdoni/keccak256-circom"
           target="_blank">keccak256-circom</a>,
-<a href="https://github.com/vocdoni/zk-franchise-proof-circuit/tree/9d25884142f0018746326d5f8c3ac714fe844edd" target="_blank">census-proof</a>
+<a href="https://github.com/vocdoni/zk-franchise-proof-circuit/tree/9d25884142f0018746326d5f8c3ac714fe844edd" target="_blank">census-proof</a>,
+          and plonky2's <a href="https://github.com/0xPARC/plonky2-crypto-gadgets" target="_blank">aes-gcm cipher &amp; poseidon-cipher</a>
           </li>
           <li>
-            some voting system <i>designs &#38; implementations</i> <a
+            some voting system (rollup style) <i>designs &#38; implementations</i> <a
   href="https://github.com/aragonzkresearch/research/blob/main/ovote/ovote.pdf"
   target="_blank">OVOTE</a> and <a
 href="https://github.com/aragonzkresearch/research/blob/main/blind-ovote/blind-ovote.pdf"
@@ -226,7 +231,7 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
       <h2>Recent <b>Work</b>:</h2>
 
       <div class="recent-work-box">
-        <h4 class="gray">2023 - now</h4>
+        <h4 class="gray">2023 - 2026</h4>
         <!-- 2023 -->
         <h3 style="display:inline;"><a href="https://research.0xparc.org" target="_blank" class="recentwork">0xPARC Research</a> -</h3>
         <i style="display:inline;">Applied cryptography research</i>
@@ -234,7 +239,7 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
         Research and implementations of folding schemes.
         <ul>
           <li>
-            <span class="gray">privacy-ethereum/</span><a href="https://github.com/privacy-ethereum/sonobe" target="_blank">sonobe</a>: folding schemes modular library. Implemented Nova, CycleFold, HyperNova and part of ProtoGalaxy. Also designed the onchain verification approach which allowed Sonobe to be the first folding schemes library to achieve verifying folding proofs in Ethereum.
+            <span class="gray">privacy-ethereum/</span><a href="https://github.com/privacy-ethereum/sonobe" target="_blank">sonobe</a>: folding schemes modular library. Implemented Nova, CycleFold, HyperNova and ProtoGalaxy. Also designed the onchain verification approach which allowed Sonobe to be the first folding schemes library to achieve verifying folding proofs in Ethereum.
             <ul><li><a href="https://github.com/privacy-ethereum/sonobe" target="_blank">sonobe</a>, <a href="https://privacy-ethereum.github.io/sonobe-docs" target="_blank">sonobe-docs</a></li></ul>
           </li>
           <li>
@@ -243,6 +248,13 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
           <li>
             <span class="gray">privacy-scaling-explorations/</span><a href="https://github.com/privacy-scaling-explorations/multifolding-poc" target="_blank">multifolding-poc</a>: HyperNova folding scheme proof of concept implementation 
           </li>
+          <li>
+            <span class="gray">0xPARC/</span><a href="https://github.com/0xPARC/pod2" target="_blank">pod2</a>: helped with low level primitives and related circuits such as merkletrees and recursion framework.
+          </li>
+          <li>
+            <span class="gray">0xPARC/</span><a href="https://github.com/0xPARC/plonky2-crypto-gadgets" target="_blank">plonky2-crypto-gadgets</a>: plonky2 circuits for AES-GCM encryption, Poseidon cipher.
+          </li>
+        </ul>
       </div>
 
       <!-- <hr style="width:40%;margin-left:0;margin-bottom:30px;margin-top:20px;"> -->
@@ -337,7 +349,7 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
             <span class="gray">iden3/</span><a href="https://github.com/iden3/go-iden3-core" target="_blank">go-iden3-core</a>: core implementation of the iden3 system
           </li>
           <li>
-            <span class="gray">iden3/</span><a href="https://github.com/iden3/go-circom-prover-verifier" target="_blank">go-circom-prover-verifier</a>: implementation of the Groth16 zkSNARK Prover and Verifier compatible with Circom 
+            <span class="gray">iden3/</span><a href="https://github.com/iden3/go-circom-prover-verifier" target="_blank">go-circom-prover-verifier</a>: Go lang implementation of the Groth16 zkSNARK Prover and Verifier compatible with Circom 
           </li>
           <li>
             <span class="gray">iden3/</span><a href="https://github.com/iden3/circuits" target="_blank">circuits</a>: zkSNARK circuits used by the iden3 core protocol
@@ -410,7 +422,7 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
           <a href="https://github.com/arnaucube/miksi-core" target="_blank">miksi</a>: Ethereum zk-coin-mixer where all the computation & constructions are done offchain and then proved inside a zkSNARK to the smart-contract. <i><a href="https://arnaucube.github.io/miksi-app/" target="_blank">(live demo on testnet)</a></i>
         </li>
         <li>
-          <a href="https://github.com/arnaucube/eth-kzg-ceremony-alt" target="_blank">eth-kzg-ceremony-alt</a>: Alternative implementation of the contributor-client for the Ethereum KZG Trusted Setup Ceremony
+          <a href="https://github.com/arnaucube/eth-kzg-ceremony-alt" target="_blank">eth-kzg-ceremony-alt</a>: Alternative implementation of the contributor-client for the Ethereum KZG Trusted Setup Ceremony. I used this code to do my contribution to Ethereum's KZG ceremony.
         </li>
       </ul>
 

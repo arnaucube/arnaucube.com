@@ -20,7 +20,7 @@ real money (not part of *reality*), while few hackers already saw them as a vali
 form of currency.
 
 Another example was the [usage of "AFK"](https://youtu.be/KCAGb7oSwDs?t=72) by
-the ThePirateBay founders, to refer to the world offline (instead of "IRL"):
+the ThePirateBay founders, to refer to the offline world (instead of "IRL"):
 
 > *"We don't use the expression IRL, we say 'Away From Keyboard", AFK; we think
 the internet is for real"* - Peter Sunde, 2009
