@@ -18,93 +18,110 @@
     {
       "thumb": "labrador_thumb.md",
       "md": "labrador.md",
-      "metadescr": "Overview of how the post-quantum lattice-based SNARK scheme Labrador works."
+      "metadescr": "Overview of how the post-quantum lattice-based SNARK scheme Labrador works.",
+      "date": "2026-06-11"
     },
     {
       "thumb": "tools_thumb.md",
       "md": "tools.md",
       "metadescr": "A non-exhaustive overview of tools I use daily.",
-      "metaimg": "img/posts/tools/tools-preview.png"
+      "metaimg": "img/posts/tools/tools-preview.png",
+      "date": "2026-06-08"
     },
     {
       "thumb": "ai-connections_thumb.md",
       "md": "ai-connections.md",
       "metadescr": "A short note on aiccelerationism, hyperreality, and the recovery of human connections.",
-      "metaimg": "img/posts/ai/two-worlds.jpg"
+      "metaimg": "img/posts/ai/two-worlds.jpg",
+      "date": "2025-06-03"
     },
     {
       "thumb": "sonobe-talk_thumb.md",
       "metadescr": "[zkSummit12 talk] Sonobe, a modular folding schemes library",
-      "outsideArticle": "https://www.youtube.com/watch?v=z3FH9I8klDk"
+      "outsideArticle": "https://www.youtube.com/watch?v=z3FH9I8klDk",
+      "date": "2024-11-21"
     },
     {
       "thumb": "protogalaxy_thumb.md",
       "md": "protogalaxy.md",
       "metadescr": "The idea of these notes is to provide some extra intuition and explainations on ProtoGalaxy's paper. ProtoGalaxy is a folding scheme which iterates on ideas from ProtoStar paper.",
-      "metaimg": "img/posts/protogalaxy/protogalaxies-colliding.jpg"
+      "metaimg": "img/posts/protogalaxy/protogalaxies-colliding.jpg",
+      "date": "2023-08-20"
     },
     {
       "thumb": "hypernova_thumb.md",
       "metadescr": "This document contains notes on HyperNova.",
-      "outsideArticle": "https://raw.githubusercontent.com/arnaucube/math/master/notes_hypernova.pdf"
+      "outsideArticle": "https://raw.githubusercontent.com/arnaucube/math/master/notes_hypernova.pdf",
+      "date": "2023-05-16"
     },
     {
       "thumb": "ipa_thumb.md",
       "md": "ipa.md",
-      "metadescr": "This post overviews the IPA polynomial commitment described in the Halo paper, first by providing an overview on the protocol, then by doing a step-by-step example with small values, following the style done in the 'Plonk by hand series' from Joshua Fitzgerald, and later by providing a Sage implementation of the protocol."
+      "metadescr": "This post overviews the IPA polynomial commitment described in the Halo paper, first by providing an overview on the protocol, then by doing a step-by-step example with small values, following the style done in the 'Plonk by hand series' from Joshua Fitzgerald, and later by providing a Sage implementation of the protocol.",
+      "date": "2023-04-06"
     },
     {
       "thumb": "fri_thumb.md",
       "metadescr": "This document contains notes on FRI low degree testing and the trick to convert it to a polynomial commitment scheme.",
-      "outsideArticle": "https://raw.githubusercontent.com/arnaucube/math/master/notes_fri_stir.pdf"
+      "outsideArticle": "https://raw.githubusercontent.com/arnaucube/math/master/notes_fri_stir.pdf",
+      "date": "2023-02-26"
     },
     {
       "thumb": "powersoftau_thumb.md",
       "md": "powersoftau.md",
-      "metadescr": "In the following notes we go over the ideas behind the Powers of Tau ceremony, how participants contribute and how the contributions are verified (logic & code). We focus on the Ethereum's upcoming KZG-Ceremony."
+      "metadescr": "In the following notes we go over the ideas behind the Powers of Tau ceremony, how participants contribute and how the contributions are verified (logic & code). We focus on the Ethereum's upcoming KZG-Ceremony.",
+      "date": "2023-01-02"
     },
     {
       "thumb": "ringsig_thumb.md",
       "md": "ringsig.md",
-      "metadescr": "Notes on ring signatures"
+      "metadescr": "Notes on ring signatures",
+      "date": "2022-07-20"
     },
     {
       "thumb": "shamir-secret-sharing_thumb.md",
       "md": "shamir-secret-sharing.md",
-      "metadescr": "Overview of Langrange Polynomial interpolation and Shamir's secret sharing."
+      "metadescr": "Overview of Langrange Polynomial interpolation and Shamir's secret sharing.",
+      "date": "2021-10-10"
     },
     {
       "thumb": "kzg-batch-proof_thumb.md",
       "md": "kzg-batch-proof.md",
-      "metadescr": "The benefit of batch proof is that allows us to proof multiple points while the proof size remains constant to one G1 point."
+      "metadescr": "The benefit of batch proof is that allows us to proof multiple points while the proof size remains constant to one G1 point.",
+      "date": "2021-08-14"
     },
     {
       "thumb": "kzg-commitments_thumb.md",
       "md": "kzg-commitments.md",
-      "metadescr": "In the following notes I've tried to summarize the KZG Commitment scheme with the concepts that helped me to follow the reasoning."
+      "metadescr": "In the following notes I've tried to summarize the KZG Commitment scheme with the concepts that helped me to follow the reasoning.",
+      "date": "2021-08-05"
     },
     {
       "thumb": "blind-signatures-ec_thumb.md",
       "md": "blind-signatures-ec.md",
       "metaimg": "img/posts/blind-signatures-ec/flow1.png",
-      "metadescr": "In this notes, we will cover the scheme proposed at 'New Blind Signature Schemes Based on the (Elliptic Curve) Discrete Logarithm Problem' paper by Hamid Mala & Nafiseh Nezhadansari."
+      "metadescr": "In this notes, we will cover the scheme proposed at 'New Blind Signature Schemes Based on the (Elliptic Curve) Discrete Logarithm Problem' paper by Hamid Mala & Nafiseh Nezhadansari.",
+      "date": "2021-07-30"
     },
     {
       "thumb": "coffeeminer_thumb.md",
       "md": "coffeeminer-hacking-wifi-cryptocurrency-miner.md",
       "metaimg": "img/posts/coffeeMiner/coffeeMiner-network-attack.png",
-      "metadescr": "The goal of this post, is to explain how can be done the attack of MITM (Machine-In-The-Middle) to inject some javascript in the html pages, to force all the machines connected to a WiFi network to be mining a cryptocurrency for the attacker."
+      "metadescr": "The goal of this post, is to explain how can be done the attack of MITM (Machine-In-The-Middle) to inject some javascript in the html pages, to force all the machines connected to a WiFi network to be mining a cryptocurrency for the attacker.",
+      "date": "2018-01-04"
     },
     {
       "thumb": "flock-botnet_thumb.md",
       "md": "flock-botnet.md",
       "metaimg": "img/posts/flock-botnet/markovchain.png",
-      "metadescr": "Developing a twitter botnet with autonomous bots replying tweets with text generated based on probabilities in Markov chains"
+      "metadescr": "Developing a twitter botnet with autonomous bots replying tweets with text generated based on probabilities in Markov chains",
+      "date": "2017-12-29"
     },
     {
       "thumb": "blogo_thumb.md",
       "md": "blogo.md",
-      "metadescr": "How has this blog been made? In this post we will see how to develop a minimalistic static blog template engine with Go."
+      "metadescr": "How has this blog been made? In this post we will see how to develop a minimalistic static blog template engine with Go.",
+      "date": "2017-12-26"
     }
   ],
   "copyRaw": [

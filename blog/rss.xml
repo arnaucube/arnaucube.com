@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>arnaucube - blog</title>
+    <link>https://arnaucube.com/blog</link>
+    <description>arnaucube blog</description>
+    <item>
+      <title>Notes on Labrador, a lattice-based SNARK scheme</title>
+      <link>https://arnaucube.com/blog/labrador.html</link>
+      <description>Overview of how the post-quantum lattice-based SNARK scheme Labrador works.</description>
+      <pubDate>Thu, 11 Jun 2026 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/labrador.html</guid>
+    </item>
+    <item>
+      <title>Tools</title>
+      <link>https://arnaucube.com/blog/tools.html</link>
+      <description>A non-exhaustive overview of tools I use daily.</description>
+      <pubDate>Mon, 08 Jun 2026 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/tools.html</guid>
+    </item>
+    <item>
+      <title>Human connections in the early days of AI</title>
+      <link>https://arnaucube.com/blog/ai-connections.html</link>
+      <description>A short note on aiccelerationism, hyperreality, and the recovery of human connections.</description>
+      <pubDate>Tue, 03 Jun 2025 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/ai-connections.html</guid>
+    </item>
+    <item>
+      <title>&lt;span style=&#34;font-size:85%&#34;&gt;[zkSummit12 talk]&lt;/span&gt; Sonobe, a modular folding schemes library</title>
+      <link>https://www.youtube.com/watch?v=z3FH9I8klDk</link>
+      <description>[zkSummit12 talk] Sonobe, a modular folding schemes library</description>
+      <pubDate>Thu, 21 Nov 2024 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=z3FH9I8klDk</guid>
+    </item>
+    <item>
+      <title>Notes on ProtoGalaxy</title>
+      <link>https://arnaucube.com/blog/protogalaxy.html</link>
+      <description>The idea of these notes is to provide some extra intuition and explainations on ProtoGalaxy&#39;s paper. ProtoGalaxy is a folding scheme which iterates on ideas from ProtoStar paper.</description>
+      <pubDate>Sun, 20 Aug 2023 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/protogalaxy.html</guid>
+    </item>
+    <item>
+      <title>Notes on HyperNova (pdf)</title>
+      <link>https://raw.githubusercontent.com/arnaucube/math/master/notes_hypernova.pdf</link>
+      <description>This document contains notes on HyperNova.</description>
+      <pubDate>Tue, 16 May 2023 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://raw.githubusercontent.com/arnaucube/math/master/notes_hypernova.pdf</guid>
+    </item>
+    <item>
+      <title>IPA polynomial commitment by hand</title>
+      <link>https://arnaucube.com/blog/ipa.html</link>
+      <description>This post overviews the IPA polynomial commitment described in the Halo paper, first by providing an overview on the protocol, then by doing a step-by-step example with small values, following the style done in the &#39;Plonk by hand series&#39; from Joshua Fitzgerald, and later by providing a Sage implementation of the protocol.</description>
+      <pubDate>Thu, 06 Apr 2023 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/ipa.html</guid>
+    </item>
+    <item>
+      <title>Notes on FRI and STIR (pdf)</title>
+      <link>https://raw.githubusercontent.com/arnaucube/math/master/notes_fri_stir.pdf</link>
+      <description>This document contains notes on FRI low degree testing and the trick to convert it to a polynomial commitment scheme.</description>
+      <pubDate>Sun, 26 Feb 2023 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://raw.githubusercontent.com/arnaucube/math/master/notes_fri_stir.pdf</guid>
+    </item>
+    <item>
+      <title>Implementing the powers of tau contributor</title>
+      <link>https://arnaucube.com/blog/powersoftau.html</link>
+      <description>In the following notes we go over the ideas behind the Powers of Tau ceremony, how participants contribute and how the contributions are verified (logic &amp; code). We focus on the Ethereum&#39;s upcoming KZG-Ceremony.</description>
+      <pubDate>Mon, 02 Jan 2023 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/powersoftau.html</guid>
+    </item>
+    <item>
+      <title>bLSAG ring signatures overview</title>
+      <link>https://arnaucube.com/blog/ringsig.html</link>
+      <description>Notes on ring signatures</description>
+      <pubDate>Wed, 20 Jul 2022 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/ringsig.html</guid>
+    </item>
+    <item>
+      <title>Lagrange Polynomial Interpolation and Shamir secret sharing</title>
+      <link>https://arnaucube.com/blog/shamir-secret-sharing.html</link>
+      <description>Overview of Langrange Polynomial interpolation and Shamir&#39;s secret sharing.</description>
+      <pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/shamir-secret-sharing.html</guid>
+    </item>
+    <item>
+      <title>Batch proof in KZG Commitments</title>
+      <link>https://arnaucube.com/blog/kzg-batch-proof.html</link>
+      <description>The benefit of batch proof is that allows us to proof multiple points while the proof size remains constant to one G1 point.</description>
+      <pubDate>Sat, 14 Aug 2021 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/kzg-batch-proof.html</guid>
+    </item>
+    <item>
+      <title>Notes on KZG polynomial commitments</title>
+      <link>https://arnaucube.com/blog/kzg-commitments.html</link>
+      <description>In the following notes I&#39;ve tried to summarize the KZG Commitment scheme with the concepts that helped me to follow the reasoning.</description>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/kzg-commitments.html</guid>
+    </item>
+    <item>
+      <title>Notes on blind signatures over elliptic curves</title>
+      <link>https://arnaucube.com/blog/blind-signatures-ec.html</link>
+      <description>In this notes, we will cover the scheme proposed at &#39;New Blind Signature Schemes Based on the (Elliptic Curve) Discrete Logarithm Problem&#39; paper by Hamid Mala &amp; Nafiseh Nezhadansari.</description>
+      <pubDate>Fri, 30 Jul 2021 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/blind-signatures-ec.html</guid>
+    </item>
+    <item>
+      <title>CoffeeMiner: Hacking WiFi to inject cryptocurrency miner to HTML requests</title>
+      <link>https://arnaucube.com/blog/coffeeminer-hacking-wifi-cryptocurrency-miner.html</link>
+      <description>The goal of this post, is to explain how can be done the attack of MITM (Machine-In-The-Middle) to inject some javascript in the html pages, to force all the machines connected to a WiFi network to be mining a cryptocurrency for the attacker.</description>
+      <pubDate>Thu, 04 Jan 2018 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/coffeeminer-hacking-wifi-cryptocurrency-miner.html</guid>
+    </item>
+    <item>
+      <title>Auto generated tweets from Markov chains</title>
+      <link>https://arnaucube.com/blog/flock-botnet.html</link>
+      <description>Developing a twitter botnet with autonomous bots replying tweets with text generated based on probabilities in Markov chains</description>
+      <pubDate>Fri, 29 Dec 2017 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/flock-botnet.html</guid>
+    </item>
+    <item>
+      <title>Static blog template engine implementation in Go</title>
+      <link>https://arnaucube.com/blog/blogo.html</link>
+      <description>How has this blog been made? In this post we will see how to develop a minimalistic static blog template engine with Go.</description>
+      <pubDate>Tue, 26 Dec 2017 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/blogo.html</guid>
+    </item>
+  </channel>
+</rss>
