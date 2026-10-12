@@ -149,11 +149,11 @@
       <br>
       <div style="display:inline-block;max-width:500px; margin-left:10%;">
       <!-- <div style="float:right; max-width:500px;"> -->
-      <p><b>arnaucube</b> - cryptography engineer</p>
+      <p><b>arnaucube</b> - Applied Cryptography & Systems Engineer</p>
         <span  style="font-size:110%;">
           <a href="/blog">blog</a>
           <span style="margin: 10px;">|</span>
-          <a href="/blog/notes.html">notes</a>
+          <a href="/notes.html">notes</a>
           <span style="margin: 10px;">|</span>
           <a href="https://github.com/arnaucube" target="_blank">github</a>
           <span style="font-style:italic;">(<a href="https://git.arnaucube.com/arnaucube?sort=moststars" target="_blank">git-mirror</a>)</span>
@@ -164,15 +164,25 @@
 
       <br><br>
       <div style="margin:30px;">
-        Cryptography engineer with experience implementing cryptography protocols (zkSNARKs, hashes, ciphers, folding schemes, zk-circuits, ...).
-        On my free time I enjoy self-studying <a target="_blank" href="/blog/notes.html">some math topics</a>.
+          <p>I work on cryptographic protocols and security-related systems, across the boundary between cryptographic research and production engineering.</p>
+          <!-- <p>Over the past 8+ years I've worked on zero-knowledge proofs, folding schemes, digital identity, privacy protocols and infrastructure, primarily in Rust and Go.</p> -->
+          <p>My work includes
+          <ul>
+            <li>the core protocol and cryptographic stack of <b>iden3</b>,</li>
+            <li>the <b>Hermez zkRollup node</b> used for its mainnet launch,</li>
+            <li>privacy-preserving <b>voting protocols</b> using zero-knowledge proofs and blind signatures at Aragon &amp; Vocdoni,</li>
+            <li>and, most recently, <b>Sonobe</b>, a modular implementation of (zkSNARK) folding schemes including Nova, HyperNova, ProtoGalaxy and CycleFold.</li>
+          </ul></p>
+          <p>I'm particularly interested in <strong>applied cryptography, zero-knowledge proofs, secure protocol design, post-quantum cryptography, verifiable computation and cryptographic infrastructure</strong>.</p>
+        On my free time I enjoy self-studying <a href="/notes.html">some math topics</a>.
 
+        <!--
         <br><br><br>
         Some of the projects I've enjoyed working on over these past years:<br>
         <ul>
           <li>
             <i>Folding schemes</i> implementations such as Nova, HyperNova, ProtoGalaxy, CycleFold in the
-        <a href="https://github.com/privacy-ethereum/sonobe" target="_blank">Sonobe</a> library
+        <a href="https://github.com/ethereum/sonobe" target="_blank">Sonobe</a> library
           </li>
           <li>
             Elliptic curve <i>signature schemes</i> such as
@@ -208,7 +218,14 @@ target="_blank">Blind-OVOTE</a>.
           <li>
             <i>FHE (full-homomorphic encryption)</i> schemes such as CKKS, BFV, TFHE at <a href="https://github.com/arnaucube/fhe-study" target="_blank">fhe-study</a>.
           </li>
+          <li>
+            <i>VMs (Virtual machines)</i> such as
+            <a href="https://github.com/arnaucube/chip8-rs" target="_blank">chip8-rs</a>,
+            <a href="https://github.com/arnaucube/evm-rs" target="_blank">evm-rs</a>,
+            <a href="https://github.com/arnaucube/rv32-rs" target="_blank">Risc-V (RV32)</a>,
+          </li>
         </ul>
+        -->
         <!--
         Interested on implementing cryptographic primitives (both rust libraries and zk circuits).
 Examples of things I've enjoyed working on these past years:
@@ -228,19 +245,35 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
       <!-- <br><br> -->
 
       <div class="column" style="font-size:100%;">
-      <h2>Recent <b>Work</b>:</h2>
+      <h2>Selected <b>Work</b>:</h2>
 
       <div class="recent-work-box">
         <h4 class="gray">2023 - 2026</h4>
         <!-- 2023 -->
         <h3 style="display:inline;"><a href="https://research.0xparc.org" target="_blank" class="recentwork">0xPARC Research</a> -</h3>
         <i style="display:inline;">Applied cryptography research</i>
+        <p><span class="gray">ethereum/</span><a href="https://github.com/ethereum/sonobe" target="_blank">Sonobe</a> is a modular Rust library for folding schemes and incrementally verifiable computation. Core developer, designed the architecture of the library and the on-chain verification.</p>
+
+        My work included:
+        <ul>
+          <li>implementing <b>Nova, CycleFold, HyperNova and ProtoGalaxy</b></li>
+        <li>designing common abstractions that allow different folding schemes to be used under the same interface</li>
+        <li>designing and implementing Sonobe's <b>Ethereum verification architecture</b>, which allowed Sonobe to be the first folding schemes library to achieve verifying folding proofs on Ethereum</li>
+        <li>working on the integration of different circuit frontends and commitment schemes</li>
+        <li>implementing proof-of-concepts for newly published folding constructions, which lter got ported to Sonobe (<a href="https://github.com/arnaucube/protogalaxy-poc" target="_blank">protogalaxy-poc</a> & <a href="https://github.com/privacy-scaling-explorations/multifolding-poc" target="_blank">hypernova-poc</a>
+          )</li>
+
+        </ul>
+        Also contributed to other 0xPARC projects including <a href="https://github.com/0xPARC/pod2" target="_blank">POD2</a> and cryptographic gadgets for Plonky2 (eg. <a href="https://github.com/0xPARC/plonky2-crypto-gadgets" target="_blank">AES & Poseidon ciphers</a>).
+
+
         <br>
+        <!--
         Research and implementations of folding schemes.
         <ul>
           <li>
-            <span class="gray">privacy-ethereum/</span><a href="https://github.com/privacy-ethereum/sonobe" target="_blank">sonobe</a>: folding schemes modular library. Implemented Nova, CycleFold, HyperNova and ProtoGalaxy. Also designed the onchain verification approach which allowed Sonobe to be the first folding schemes library to achieve verifying folding proofs in Ethereum.
-            <ul><li><a href="https://github.com/privacy-ethereum/sonobe" target="_blank">sonobe</a>, <a href="https://privacy-ethereum.github.io/sonobe-docs" target="_blank">sonobe-docs</a></li></ul>
+            <span class="gray">ethereum/</span><a href="https://github.com/ethereum/sonobe" target="_blank">sonobe</a>: folding schemes modular library. Implemented Nova, CycleFold, HyperNova and ProtoGalaxy. Also designed the onchain verification approach which allowed Sonobe to be the first folding schemes library to achieve verifying folding proofs in Ethereum.
+            <ul><li><a href="https://github.com/ethereum/sonobe" target="_blank">sonobe</a>, <a href="https://privacy-ethereum.github.io/sonobe-docs" target="_blank">sonobe-docs</a></li></ul>
           </li>
           <li>
             <a href="https://github.com/arnaucube/protogalaxy-poc" target="_blank">protogalaxy-poc</a>: ProtoGalaxy folding scheme proof of concept implementation
@@ -255,6 +288,7 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
             <span class="gray">0xPARC/</span><a href="https://github.com/0xPARC/plonky2-crypto-gadgets" target="_blank">plonky2-crypto-gadgets</a>: plonky2 circuits for AES-GCM encryption, Poseidon cipher.
           </li>
         </ul>
+        -->
       </div>
 
       <!-- <hr style="width:40%;margin-left:0;margin-bottom:30px;margin-top:20px;"> -->
@@ -263,35 +297,20 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
         <h4 class="gray">2022 - 2023</h4>
         <!-- 2022 - 2023 -->
         <h3 style="display:inline;"><a href="https://vocdoni.io" target="_blank" class="recentwork">Vocdoni</a> & <a href="https://research.aragon.org/about/" target="_blank" class="recentwork">Aragon-ZK-Research</a> -</h3>
-      <i style="display:inline;">Decentralized governance & voting tooling.</i>
+      <i style="display:inline;">Cryptography Research & Engineering.</i>
         <br>
-        Design and implementation of voting schemes using zkSNARKs and other cryptographic schemes.
+        Design and implementation of privacy-preserving voting protocols using zkSNARKs and other cryptographic schemes.
         <!-- Design and implementation of <a href="https://docs.vocdoni.io/architecture/protocol/anonymous-voting/zk-census-proof.html#implementation-spec" target="_blank">anonymous voting solutions</a> using zkSNARKs. -->
         <!-- Introduced <a href="https://github.com/vocdoni/protocol/discussions/23" target="_blank">some</a> design <a href="https://github.com/vocdoni/zk-franchise-proof-circuit/commit/2efeecc12669279dcf493bd9c782ba80b3c87dc8" target="_blank">optimizations</a> in the circuits which reduced the number of constraints. -->
         <!-- <br>Also, contributed to <span class="gray">vocdoni/</span><a href="https://github.com/vocdoni/vocdoni-node/commits?author=arnaucube" target="_blank">vocdoni-node</a> adding zk related code. -->
         <!-- <br> -->
         <!-- Other stuff implemented: -->
         <br>
-        <ul>
-          <li>
-            <span class="gray">vocdoni/</span><a href="https://github.com/vocdoni/keccak256-circom" target="_blank">keccak256-circom</a>: ethereum sha3 (keccak256) hash function implemented in Circom
-          </li>
-          <li>
-            <span class="gray">vocdoni/</span><a href="https://github.com/vocdoni/zk-franchise-proof-circuit" target="_blank">zk-census-proof</a>: anonymous census proof circuit used in Vocdoni's Blockchain
-            <ul>
-              <li>
-                <span class="gray">aragonzkresearch/</span><a href="https://github.com/aragonzkresearch/ark-anon-vote" target="_blank">ark-anon-vote</a>: (similar design, implemented in arkworks) onchain anonymous voting snark circuit.
-              </li>
-            </ul>
-          </li>
-          <li>
-            <span class="gray">vocdoni/</span><a href="https://github.com/vocdoni/arbo" target="_blank">arbo</a>: optimized MerkleTree which parallelizes by CPUs for faster computation, compatible with circomlib implementation
-          </li>
-            <li>
-              <span class="gray">aragonzkresearch/</span><a href="https://github.com/aragonzkresearch/ark-ec-blind-signatures" target="_blank">ark-ec-blind-signatures</a>: Blind signatures over elliptic curve implementation (native & r1cs constraints)
-            </li>
-          </ul>
-          <span style="">OVOTE</span>: Offchain Voting with Onchain Trustless Execution (kind of a validity-Rollup for voting). Highly scalable, gass-less for users, voting system on Ethereum relying on zkSNARK proofs.
+        <p>Some of the work included:</p>
+        <b>OVOTE</b>: A validity-rollup-style voting system in which votes are processed off-chain while a zkSNARK proves the correctness of the result for on-chain execution.
+
+Designed the protocol and worked on its Circom circuits, smart contracts and Go infrastructure.
+          <!-- <span style="">OVOTE</span>: Offchain Voting with Onchain Trustless Execution (kind of a validity-Rollup for voting). Highly scalable, gass-less for users, voting system on Ethereum relying on zkSNARK proofs. -->
           <ul>
             <li>
               <a href="https://research.aragon.org/docs/ovote" target="_blank">OVOTE technical document</a>
@@ -306,7 +325,7 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
               <span class="gray">aragonzkresearch/</span><a href="https://github.com/aragonzkresearch/ovote-node" target="_blank">ovote-node</a>: OVOTE backend node implemented in Go
             </li>
           </ul>
-          <span style="">Blind-OVOTE</span>: (OVOTE with Blind Signatures) L2 validity rollup combined with blind signatures over elliptic curves inside zkSNARK, to provide offchain anonymous voting with onchain binding execution on Ethereum
+          <b>Blind-OVOTE</b>: An extension of OVOTE combining elliptic-curve blind signatures with zero-knowledge proofs to provide anonymous voting with binding ethereum on-chain execution.
           <ul>
             <li>
               <a href="https://research.aragon.org/docs/blind-ovote" target="_blank">Blind-OVOTE technical document</a>
@@ -315,7 +334,22 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
               <a href="https://forum.aragon.org/t/blind-ovote-ovote-with-blind-signatures-for-voter-anonymity/3881" target="_blank">Forum post</a> with a high level explanation.
             </li>
             <li>
-              <span class="gray">aragonzkresearch/</span><a href="https://github.com/aragonzkresearch/blind-ovote" target="_blank">blind-ovote</a>: Blind-OVOTE implementation in arkworks.
+              <span class="gray">aragonzkresearch/</span><a href="https://github.com/aragonzkresearch/blind-ovote" target="_blank">blind-ovote</a>: Blind-OVOTE implementation in Rust.
+            </li>
+          </ul>
+          Other work included:
+        <ul>
+          <li>
+            <span class="gray">vocdoni/</span><a href="https://github.com/vocdoni/keccak256-circom" target="_blank">keccak256-circom</a>: ethereum sha3 (keccak256) hash function implemented in Circom
+          </li>
+          <li>
+            <span class="gray">vocdoni/</span><a href="https://github.com/vocdoni/zk-franchise-proof-circuit" target="_blank">zk-census-proof</a>: anonymous census proof circuit used in Vocdoni's Blockchain (also in arkworks: <a href="https://github.com/aragonzkresearch/ark-anon-vote" target="_blank">ark-anon-vote</a>)
+          </li>
+          <li>
+            <span class="gray">vocdoni/</span><a href="https://github.com/vocdoni/arbo" target="_blank">arbo</a>: optimized CPU-parallel MerkleTree compatible with circomlib implementation, compatible with multiple hash functions
+          </li>
+            <li>
+              <span class="gray">aragonzkresearch/</span><a href="https://github.com/aragonzkresearch/ark-ec-blind-signatures" target="_blank">ark-ec-blind-signatures</a>: Blind signatures over elliptic curve implementation (native & r1cs constraints)
             </li>
           </ul>
       </div>
@@ -325,13 +359,13 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
         <h4 class="gray">2018 - 2022</h4>
           <!-- 2021 - 2022 -->
         <h3 style="display:inline;"><a href="https://hermez.io" target="_blank" class="recentwork">Hermez zkRollup</a> -</h3>
-        <i style="display:inline;"> Decentralized zkRollup on Ethereum.</i><br>
+        <i style="display:inline;"> Protocol & Backend Engineer</i><br>
         Main task has been to implement the Hermez node,
           used to <a href="https://cointelegraph.com/news/hermes-network-launches-zk-rollups-on-ethereum-mainnet-to-process-cheap-payments"
                      target="_blank">launch the mainnet</a> of the zkRollup network (1.0):
              <br><span style="margin-left:30px;"></span>  <span class="gray">hermeznetwork/</span><a href="https://github.com/arnaucube/hermez-node" target="_blank">hermez-node</a>
-          <br>My focus has been mainly in the TxSelector, TxProcessor (managing
-          the rollup state tree) and BatchBuilder (generating the data
+          <br>Main responsability was developing the node used for the network's production launch. Worked primarly on the transaction selector, transction processor (managing
+          the rollup state tree) and batch builder (generating the data
           structure compatible with the zkSNARK circuits to do the proof generation).
         <!-- </div> -->
         <!-- <hr> -->
@@ -340,8 +374,9 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
           <!-- 2018 - 2021 -->
           <br><br>
         <h3 style="display:inline;"><a href="https://iden3.io" target="_blank" class="recentwork">iden3</a> -</h3>
-        <i style="display:inline;"> Scalable decentralized identity system with privacy by using zero knowledge proofs.</i><br>
-        Design and specify the core protocol, develop the core libraries, servers, zk circom circuits and zkSNARK Groth16 Go prover.
+        <i style="display:inline;">Cryptographiy Protocol & Systems Engineer</i><br>
+<!-- Scalable decentralized identity system with privacy by using zero knowledge proofs. -->
+Design and specify the core protocol, develop the core libraries, servers, zk circom circuits and zkSNARK Groth16 Go prover, for <b>iden3</b>, a decentralized identity system using zero-knowledge proofs for privacy.
         <ul>
           <li>
             <span class="gray">iden3/</span><a href="https://github.com/iden3/go-iden3-crypto" target="_blank">go-iden3-crypto</a>: cryptographic primitives (SNARK-friendly) used in iden3 </li>
@@ -359,35 +394,45 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
 </div>
 
 <div style="font-size:80%;">
-      <h2>Some other <b>free time</b> side projects:</h2>
+      <!-- <h2>Some other <b>free time</b> side projects:</h2> -->
+      <h2>Selected open-source work:</h2>
       <ul>
-        <li>
-          <a href="https://github.com/arnaucube/go-snark-study" target="_blank">go-snark-study</a>: <code>Go</code> zkSNARK implementation from scratch (compiler, setup, prover, verifier)
-        </li>
-        <li>
-          <a href="https://github.com/arnaucube/go-bellman-verifier" target="_blank">go-bellman-verifier</a>: <code>Go</code> Groth16 zkSNARK bellman proof verifier using cloudflare/bn256 Pairing
-        </li>
-        <li>
-          <a href="https://github.com/arnaucube/babyjubjub-rs" target="_blank">babyjubjub-rs</a>: BabyJubJub elliptic curve implementation in <code>Rust</code>
-        </li>
-        <li>
-          <a href="https://github.com/arnaucube/kzg-commitments-study" target="_blank">kzg-commitments</a>: Kate-Zaverucha-Goldberg (KZG10) Polynomial Commitments in <code>Go</code>
-        </li>
-        <li>
-          <a href="https://github.com/arnaucube/fri-commitment" target="_blank">fri-commitment</a>: FRI polynomial commitment in <code>Rust</code>
-        </li>
-        <li>
-          <a href="https://github.com/arnaucube/ipa-rs" target="_blank">ipa-rs</a>: modified Inner Product Argument (IPA) version from Halo paper in <code>Rust</code> using arkworks.
-        </li>
-        <li>
-          <a href="https://github.com/arnaucube/ring-signatures-rs" target="_blank">ring-signatures-rs</a>: bLSAG ring signatures implementation in <code>Rust</code>
-        </li>
-        <li>
-          <a href="https://github.com/arnaucube/poseidon-rs" target="_blank">poseidon-rs</a>: Poseidon hash implementation in <code>Rust</code>
-        </li>
-        <li>
-          <a href="https://github.com/arnaucube/go-blindsecp256k1" target="_blank">go-blindsecp256k1</a>: Blind signatures over secp256k1 elliptic curve in <code>Go</code> <i>(with the <a href="https://github.com/arnaucube/blindsecp256k1-js" target="_blank">compatible typescript implementation</a>)</i>
-        </li>
+        <li>Proof systems & commitmments</li>
+        <ul>
+          <li>
+            <a href="https://github.com/arnaucube/go-snark" target="_blank">go-snark</a>: <code>Go</code> zkSNARK implementation from scratch (compiler, setup, prover, verifier)
+          </li>
+          <li>
+            <a href="https://github.com/arnaucube/go-bellman-verifier" target="_blank">go-bellman-verifier</a>: <code>Go</code> Groth16 zkSNARK bellman proof verifier using cloudflare/bn256 Pairing
+          </li>
+          <li>
+            <a href="https://github.com/arnaucube/protogalaxy-poc" target="_blank">protogalaxy-poc</a>: implementation of the ProtoGalaxy SNARK folding scheme in <code>Rust</code>.
+          </li>
+        </ul>
+        <li>Cryptographic primitives</li>
+        <ul>
+          <li>
+            <a href="https://github.com/arnaucube/babyjubjub-rs" target="_blank">babyjubjub-rs</a>: BabyJubJub elliptic curve implementation in <code>Rust</code>
+          </li>
+          <li>
+            <a href="https://github.com/arnaucube/poseidon-rs" target="_blank">poseidon-rs</a>: Poseidon hash implementation in <code>Rust</code>
+          </li>
+          <li>
+            <a href="https://github.com/arnaucube/fri-commitment" target="_blank">fri-commitment</a>: FRI polynomial commitment in <code>Rust</code>
+          </li>
+          <li>
+            <a href="https://github.com/arnaucube/ipa-rs" target="_blank">ipa-rs</a>: modified Inner Product Argument (IPA) version from Halo paper in <code>Rust</code> using arkworks.
+          </li>
+          <li>
+            <a href="https://github.com/arnaucube/kzg-commitments-study" target="_blank">kzg-commitments</a>: Kate-Zaverucha-Goldberg (KZG10) Polynomial Commitments in <code>Go</code>
+          </li>
+          <li>
+            <a href="https://github.com/arnaucube/ring-signatures-rs" target="_blank">ring-signatures-rs</a>: bLSAG ring signatures implementation in <code>Rust</code>
+          </li>
+          <li>
+            <a href="https://github.com/arnaucube/go-blindsecp256k1" target="_blank">go-blindsecp256k1</a>: Blind signatures over secp256k1 elliptic curve in <code>Go</code> <i>(with the <a href="https://github.com/arnaucube/blindsecp256k1-js" target="_blank">compatible typescript implementation</a>)</i>
+          </li>
+        </ul>
       <!-- </ul> -->
       <!-- Other: -->
       <!-- <ul> -->
@@ -397,41 +442,112 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
         <!-- <li> -->
         <!--   <a href="https://github.com/arnaucube/go-dht" target="_blank">go-dht</a>: Kademlia DHT implementation in <code>Go</code> -->
         <!-- </li> -->
-        <li>
-          <a href="https://github.com/arnaucube/merkletree-rs" target="_blank">merkletree-rs</a>: Sparse MerkleTree implementation in <code>Rust</code> (also a <code>Go</code> impl <a href="https://github.com/arnaucube/go-merkletree" target="_blank">go-merkletree</a>)
-        </li>
-        <li>
-          <a href="https://github.com/arnaucube/shamirsecretsharing" target="_blank">shamirsecretsharing</a>: Shamir's Secret Sharing <code>Rust</code> & <code>Go</code> implementation + <code>WASM</code> lib
-        </li>
-        <!-- <li> -->
-        <!--   <a href="https://github.com/arnaucube/cryptofun" target="_blank">cryptofun</a>: Crypto algorithms from scratch, in order to get familiar with them from inside. For example: ECC, Paillier, RSA, Homomorphic computation, ElGamal, Schnorr, ECDSA, BN128, ... -->
-        <!-- </li> -->
+        <li>Systems & virtual machines</li>
+        <ul>
         <li>
           <a href="https://github.com/arnaucube/evm-rs" target="_blank">evm-rs</a>: partial implementation of the Ethereum Virtual Machine (EVM) in <code>Rust</code>
         </li>
         <li>
-          <a href="https://kvartalo.github.io/website/" target="_blank">kvartalo</a>: a local social cryptocurrency for neigbourhoods, that we used in a Barcelona neighbourhood as experiment during few months. Build on top of Ethereum blockchain & Tendermint Core
+          <a href="https://github.com/arnaucube/rv32-rs" target="_blank">rv32-rs</a>: RISC-V (RV32IM) implementation in <code>Rust</code>
         </li>
-        <li>
-          <a href="https://github.com/arnaucube/chip8-rs" target="_blank">chip8-rs</a>: CHIP-8 virtual machine emulator written in <code>Rust</code> (also a <code>Go</code> impl <a href="https://github.com/arnaucube/go-chip8" target="_blank">go-chip8</a>)
-        </li>
-        <li>
-          <a href="https://github.com/arnaucube/fft-rs" target="_blank">fft-rs</a>: Fast Fourier Transform (FFT) implementation in <code>Rust</code>
-        </li>
-        <li>
-          <a href="https://github.com/arnaucube/miksi-core" target="_blank">miksi</a>: Ethereum zk-coin-mixer where all the computation & constructions are done offchain and then proved inside a zkSNARK to the smart-contract. <i><a href="https://arnaucube.github.io/miksi-app/" target="_blank">(live demo on testnet)</a></i>
-        </li>
-        <li>
-          <a href="https://github.com/arnaucube/eth-kzg-ceremony-alt" target="_blank">eth-kzg-ceremony-alt</a>: Alternative implementation of the contributor-client for the Ethereum KZG Trusted Setup Ceremony. I used this code to do my contribution to Ethereum's KZG ceremony.
-        </li>
+        </ul>
+
+        <!-- <li> -->
+        <!--   <a href="https://github.com/arnaucube/merkletree-rs" target="_blank">merkletree-rs</a>: Sparse MerkleTree implementation in <code>Rust</code> (also a <code>Go</code> impl <a href="https://github.com/arnaucube/go-merkletree" target="_blank">go-merkletree</a>) -->
+        <!-- </li> -->
+        <!-- <li> -->
+        <!--   <a href="https://github.com/arnaucube/shamirsecretsharing" target="_blank">shamirsecretsharing</a>: Shamir's Secret Sharing <code>Rust</code> & <code>Go</code> implementation + <code>WASM</code> lib -->
+        <!-- </li> -->
+        <!-- <li> -->
+        <!--   <a href="https://github.com/arnaucube/cryptofun" target="_blank">cryptofun</a>: Crypto algorithms from scratch, in order to get familiar with them from inside. For example: ECC, Paillier, RSA, Homomorphic computation, ElGamal, Schnorr, ECDSA, BN128, ... -->
+        <!-- </li> -->
+        <!-- <li> -->
+        <!--   <a href="https://kvartalo.github.io/website/" target="_blank">kvartalo</a>: a local social cryptocurrency for neigbourhoods, that we used in a Barcelona neighbourhood as experiment during few months. Build on top of Ethereum blockchain & Tendermint Core -->
+        <!-- </li> -->
+        <!-- <li> -->
+        <!--   <a href="https://github.com/arnaucube/chip8-rs" target="_blank">chip8-rs</a>: CHIP-8 virtual machine emulator written in <code>Rust</code> (also a <code>Go</code> impl <a href="https://github.com/arnaucube/go-chip8" target="_blank">go-chip8</a>) -->
+        <!-- </li> -->
+        <!-- <li> -->
+        <!--   <a href="https://github.com/arnaucube/fft-rs" target="_blank">fft-rs</a>: Fast Fourier Transform (FFT) implementation in <code>Rust</code> -->
+        <!-- </li> -->
+        <li>Other:</li>
+        <ul>
+          <li>
+            <a href="https://github.com/arnaucube/miksi-core" target="_blank">miksi</a>: Ethereum zk-coin-mixer where all the computation & constructions are done offchain and then proved inside a zkSNARK to the smart-contract. <i><a href="https://arnaucube.github.io/miksi-app/" target="_blank">(live demo on testnet)</a></i>
+          </li>
+          <li>
+            <a href="https://github.com/arnaucube/eth-kzg-ceremony-alt" target="_blank">eth-kzg-ceremony-alt</a>: Alternative implementation of the contributor-client for the Ethereum KZG Trusted Setup Ceremony. I used this code to do my contribution to Ethereum's KZG ceremony.
+          </li>
+        </ul>
       </ul>
 
-      More projects directly in github: <a href="https://github.com/arnaucube?tab=repositories" target="_blank">https://github.com/arnaucube</a> <i>(Mirror of all the repos at: <a href="https://git.arnaucube.com/arnaucube?sort=moststars" target="_blank">https://git.arnaucube.com</a>)</i>.
       </div>
+      More projects directly in github: <a href="https://github.com/arnaucube?tab=repositories" target="_blank">https://github.com/arnaucube</a> <i>(Mirror of all the repos at: <a href="https://git.arnaucube.com/arnaucube?sort=moststars" target="_blank">https://git.arnaucube.com</a>)</i>.
+
+      
+      <br><br>
+  <h2>Selected talks</h2>
+  <ul style="list-style: none; padding: 0; margin: 0;">
+    <li style="display: flex; gap: 1rem; margin-bottom: 0.6em;">
+      <span style="flex: 0 0 2cm;">Sep. 2026</span>
+      <div>
+        Eth devs Barcelona meetup -
+        <b>Introduction to lattice-based cryptography</b>
+        <br>
+        <a href="https://github.com/arnaucube/math/blob/master/slides/slides_lattices-intro.pdf" target="_blank">
+          slides
+        </a>
+      </div>
+    </li>
+
+    <li style="display: flex; gap: 1rem; margin-bottom: 0.6em;">
+      <span style="flex: 0 0 2cm;">Nov. 2024</span>
+      <div>
+        zkSummit12, Lisboa -
+        <b>Sonobe, a modular folding schemes library</b>
+        <br>
+        <a href="https://github.com/arnaucube/math/blob/master/slides/slides_sonobe-zkSummit12-2024-10-08.pdf" target="_blank">
+          slides
+        </a>,
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://www.youtube.com/watch?v=z3FH9I8klDk" target="_blank">
+          video
+        </a>
+      </div>
+    </li>
+
+    <li style="display: flex; gap: 1rem; margin-bottom: 0.6em;">
+      <span style="flex: 0 0 2cm;">Jun. 2023</span>
+      <div>
+        0xPARC internal team talk, London &amp; SF -
+        <b>HyperNova's multifolding mathematical overview</b>
+        <br>
+        <a href="https://github.com/arnaucube/math/blob/master/slides/slides_hypernova-multifolding-unfolded.pdf" target="_blank">
+          slides
+        </a>
+      </div>
+    </li>
+
+    <li style="display: flex; gap: 1rem; margin-bottom: 0.6em;">
+      <span style="flex: 0 0 2cm;">Aug. 2019</span>
+      <div>
+        Web3Summit, Berlin -
+        <b>zkSNARKs from scratch: a technical explanation</b>
+        <br>
+        <a href="https://github.com/arnaucube/slides/blob/master/zksnarks-from-scratch-a-technical-explanation.pdf" target="_blank">
+          slides
+        </a>
+      </div>
+    </li>
+  </ul>
+
+
 
       <br><br><br>
       <p style="padding:0;margin:0;font-size:120%;">
         <a href="blog/index.html">blog</a>
+        <span style="margin: 10px;">|</span>
+        <a href="/notes.html">notes</a>
         <span style="margin: 10px;">|</span>
         <a href="https://github.com/arnaucube" target="_blank">github</a>
         <span style="font-style:italic;">(<a href="https://git.arnaucube.com/arnaucube?sort=moststars" target="_blank">git-mirror</a>)</span>
@@ -439,7 +555,8 @@ Maybe a common denominator from all the above would be: deep rabbit hole to dive
         <a href="https://twitter.com/arnaucube" target="_blank">twitter</a>
       </p>
       <br><br>
-      <img src="img/email.png" />
+      <a href="mailto:hello@arnaucube.com">hello@arnaucube.com</a>
+      <!-- <img src="img/email.png" /> -->
 
 
     

@@ -19,6 +19,13 @@
       <guid isPermaLink="true">https://arnaucube.com/blog/tools.html</guid>
     </item>
     <item>
+      <title>Notes on hash-based signatures (pdf)</title>
+      <link>https://raw.githubusercontent.com/arnaucube/math/master/notes_hash-based-signatures.pdf</link>
+      <description>This document contains notes on hash-based signatures (WOTS+, HORST, SPHINCS, XMSS)</description>
+      <pubDate>Sat, 27 Dec 2025 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://raw.githubusercontent.com/arnaucube/math/master/notes_hash-based-signatures.pdf</guid>
+    </item>
+    <item>
       <title>Human connections in the early days of AI</title>
       <link>https://arnaucube.com/blog/ai-connections.html</link>
       <description>A short note on aiccelerationism, hyperreality, and the recovery of human connections.</description>
