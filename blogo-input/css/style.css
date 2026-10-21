@@ -106,7 +106,7 @@ h2 a,
 h3 a,
 h4 a,
 h5 a {
-  color: black !important;
+  /* color: black !important; */
   text-decoration: none !important;
 }
 
@@ -266,4 +266,12 @@ footer .container {
   #markdown.container {
     padding: 0 14px;
   }
+}
+
+.note-box-color {
+  background: #cccccc;
+}
+
+.dark-theme .note-box-color {
+  background: #4c4c4c;
 }
