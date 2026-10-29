@@ -10,6 +10,12 @@
   "metaimg": "img/logoArnauCube.png",
   "posts": [
     {
+      "thumb": "aerie_thumb.md",
+      "md": "aerie.md",
+      "metadescr": "This post dives into the techniques that Aerie uses for the aggregation of Falcon signatures verification, obtaining an efficient post-quantum signature aggregation scheme.",
+      "date": "2026-10-29"
+    },
+    {
       "thumb": "labrador_thumb.md",
       "md": "labrador.md",
       "metadescr": "Overview of how the post-quantum lattice-based SNARK scheme Labrador works.",

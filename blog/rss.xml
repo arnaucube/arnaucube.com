@@ -5,6 +5,13 @@
     <link>https://arnaucube.com/blog</link>
     <description>arnaucube blog</description>
     <item>
+      <title>How Aerie aggregates Falcon signatures efficiently</title>
+      <link>https://arnaucube.com/blog/aerie.html</link>
+      <description>This post dives into the techniques that Aerie uses for the aggregation of Falcon signatures verification, obtaining an efficient post-quantum signature aggregation scheme.</description>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://arnaucube.com/blog/aerie.html</guid>
+    </item>
+    <item>
       <title>Notes on Labrador, a lattice-based SNARK scheme</title>
       <link>https://arnaucube.com/blog/labrador.html</link>
       <description>Overview of how the post-quantum lattice-based SNARK scheme Labrador works.</description>

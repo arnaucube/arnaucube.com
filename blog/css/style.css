@@ -275,3 +275,33 @@ footer .container {
 .dark-theme .note-box-color {
   background: #4c4c4c;
 }
+
+table {
+  font-size:65%;
+  margin:5px;
+}
+th, td {
+  border: 1px solid #333;
+  padding: 8px;
+  text-align: center;
+}
+
+/* for unfoldable on click */
+details {
+  display: inline;
+}
+summary {
+  display: inline;
+  list-style: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+details > span {
+  display: none;
+}
+details[open] > span {
+  display: inline;
+}

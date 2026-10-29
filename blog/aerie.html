@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta name="description" content="This post dives into the techniques that Aerie uses for the aggregation of Falcon signatures verification, obtaining an efficient post-quantum signature aggregation scheme." />
+    <meta charset="utf-8">
+    <title> How Aerie aggregates Falcon signatures efficiently - arnaucube - blog</title>
+    <meta name="title" content=" How Aerie aggregates Falcon signatures efficiently - arnaucube - blog">
+    <meta name="description" content="This post dives into the techniques that Aerie uses for the aggregation of Falcon signatures verification, obtaining an efficient post-quantum signature aggregation scheme.">
+
+    <meta property="og:title" content=" How Aerie aggregates Falcon signatures efficiently - arnaucube - blog" />
+    <meta property="og:description" content="This post dives into the techniques that Aerie uses for the aggregation of Falcon signatures verification, obtaining an efficient post-quantum signature aggregation scheme." />
+    <meta property="og:url" content="https://arnaucube.com/blog/aerie.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://arnaucube.com/blog/" />
+    <meta name="twitter:title" content=" How Aerie aggregates Falcon signatures efficiently - arnaucube - blog">
+    <meta name="twitter:description" content="This post dives into the techniques that Aerie uses for the aggregation of Falcon signatures verification, obtaining an efficient post-quantum signature aggregation scheme.">
+    <meta name="twitter:image" content="https://arnaucube.com/blog/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="author" content="arnaucube">
+
+    <link rel="icon" type="image/png" href="img/logoArnauCubeFavicon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- highlightjs -->
+    <!-- <link rel="stylesheet" href="js/highlightjs/atom-one-dark.css"> -->
+    <link rel="stylesheet" href="js/highlightjs/atom-one-light.css">
+    <!-- <link rel="stylesheet" href="js/highlightjs/gruvbox-dark.css"> -->
+    <script src="js/highlightjs/highlight.pack.js"></script>
+
+    <!-- katex -->
+    <link rel="stylesheet" href="js/katex/katex.min.css">
+  <link rel="alternate" type="application/rss+xml" title="arnaucube - blog RSS" href="https://arnaucube.com/blog/rss.xml">
+</head>
+
+  <body>
+
+    <!-- o_gradient_background" -->
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top"
+                      style="height:50px;font-size:100%;">
+      <div class="container">
+        <div style="float:left;">
+        <a href="/blog" style="color:#000;display:inline-block;">blog</a>
+        <span style="margin-right:20px; margin-left:20px;">|</span>
+        <a href="/notes.html" style="font-size:90%;color:#000;display:inline-block;">notes</a>
+        </div>
+        <div style="float:right;">
+          <a href="/" style="color:#000;display:inline-block;margin-right:10px;">arnaucube.com</a>
+          <a href="/blog/rss.xml" target="_blank"
+            type="application/rss+xml" title="subscribe via RSS" aria-label="subscribe via RSS">
+              <img width="12px;" src="img/rss.png" />
+          </a>
+          <div class="onoffswitch" style="margin-left:0px;display:inline-block;" title="change theme">
+            <input onclick="switchTheme()" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+              id="themeSwitcher">
+            <label class="onoffswitch-label" for="themeSwitcher"></label>
+          </div>
+        </div>
+      </div>
+      <!-- <img style="height:5px; width:100%; margin-top:8px;" src="img/gradient-line.jpg" /> -->
+    </nav>
+
+
+    <div class="container" style="max-width:800px;">
+        <br>
+        <div class="note-box-color" style="border:2px gray solid; padding:5px; width:80%;margin-left:auto; margin-right:auto; margin-bottom:5px;">
+          <i>Note: this blog is human-written, no AI generated content.</i>
+          <details>
+            <summary><i>(click for more details)</i></summary>
+            <p>Don't take me wrong, AI is useful, but for an AI-generated blog post I'd rather read the prompt than the AI output. Hence I'm keeping my blog as human-written, meaning that to write each post I spend several days (if not weeks) of carefully writting and re-writting.</p>
+          </details>
+        </div>
+
+      <h1>How Aerie aggregates Falcon signatures efficiently</h1>
+
+<p><em>2026-10-29</em></p>
+
+<p>Almost two years ago (late 2024, pre-AI coding era), with <a href="https://ahmadafuni.com">Ahmad Afuni</a> we implemented the (post-quantum) <a href="https://falcon-sign.info">Falcon signature</a> verification in a Plonky2 circuit. We used a variety of tricks to make it efficient and reduce the amount of needed circuit constraints, but one of the pain points was that in Plonky2 we work over the Goldilocks field <span class="math inline">\(\mathbb{F}_p\)</span>, with <span class="math inline">\(p=2^{64} - 2^{32} + 1 = 18446744069414584321\)</span>,
+whereas Falcon signatures work over the much smaller finite field <span class="math inline">\(\mathbb{F}_q\)</span>, with <span class="math inline">\(q=12289\)</span>, which means that inside our Plonky2 circuits we had to compute the modulo reduction check every few operations, to ensure that despite working over <span class="math inline">\(p\)</span>, the values were actually smaller than <span class="math inline">\(q\)</span>.</p>
+
+<p>A couple of weeks ago (<a href="https://x.com/SuccinctJT/status/2111136119593082925">announcement</a>) Alberto Centelles, Quang Dao, Mohammadtaghi Badakhshan and Justin Thaler published <a href="https://github.com/a16z/aerie/blob/main/paper/aerie.pdf">Aerie: Efficient Aggregation of Falcon Signatures</a>. Among many cool techniques, Aerie uses an interesting approach to ensure that the aggregated Falcon signatures satisfy the Falcon signature verification, including the modulo <span class="math inline">\(q\)</span> check over Aerie&rsquo;s field (<span class="math inline">\(p= 2^{64} - 59\)</span>). The full scheme is quite complex, and would not fit in a blog post, but in this post I&rsquo;ll focus on the technique used for the modulo <span class="math inline">\(q\)</span> checks, which I found really nice.</p>
+
+<blockquote style="font-size:105%;color:black;">
+
+It is the kind of cases where you can optimize the zk circuits a lot, but there is an alternative path relying on algebra which drastically improves performance, so it's always interesting to learn!
+
+</blockquote>
+
+<h3>Falcon signature verification</h3>
+
+<p>Falcon signatures are post-quantum signatures based on lattice cryptography, currently being standarized by NIST (FN-DSA). For each Falcon signature, we need to check</p>
+<p><span class="math display">\[i)~ s_1 + h \cdot s_2 \equiv c \pmod {q,~ X^n +1}\]</span></p><p><span class="math display">\[ii)~ || s_1 ||_2^2 + ||s_2||_2^2 + ||e||_2^2 = \lfloor \beta^2 \rfloor\]</span></p><p><span class="math display">\[iii)~ | s_{2,j} | \leq 2047,~~ \sum_j \lfloor \frac{ |s_{2,j}| }{ 128 } \rfloor \leq L\]</span></p>
+<blockquote>
+<div style="font-size:80%;">
+Here $e \in \mathbb Z^4$ is an auxiliary slack vector introduced by Aerie (not at the original Falcon signatures) to transform original Falcon's inequality into the equality we see at $(ii.)$ (works thanks to the <a href="https://en.wikipedia.org/wiki/Lagrange%27s_four-square_theorem" target="_blank">Lagrange's four-square theorem</a>).
+</div>
+</blockquote>
+
+<p>For the norm bounds check <span class="math inline">\((ii.)\)</span>, LaBRADOR (lattice-based SNARK scheme) has a similar norm check and already uses a projection technique, Johnson-Lindenstrauss projection, which I covered at the <a href="/blog/labrador.html#2.-johnson-lindenstrauss projection">LaBRADOR notes post</a>. LaBRADOR uses it to (probabilistically) bound the Euclidean norm of a committed witness without checking its coefficients individually, and Aerie uses a variant of it.</p>
+
+<p>Condition <span class="math inline">\((iii.)\)</span> enforces the signature encoding requirements from Falcon.</p>
+
+<p>For the check <span class="math inline">\((i.)~ s_1 + h \cdot s_2 \equiv c \pmod{q, X^n +1}\)</span>, we&rsquo;re interested in proving that the coefficients of <span class="math inline">\(s_1 + h \cdot s_2\)</span> and <span class="math inline">\(c\)</span> are congruent modulo <span class="math inline">\(q\)</span> after reduction modulo <span class="math inline">\(X^n + 1\)</span>.</p>
+
+<p>In this post we will focus on the check <span class="math inline">\((i)\)</span>.</p>
+
+<h3>One MLE to rule them all. ie. batching many verifications</h3>
+
+<blockquote style="font-size:85%;">
+
+For an introduction to MLEs (multilinear extensions), highly recommended <a href="https://people.cs.georgetown.edu/jthaler/ProofsArgsAndZK.html" target="_blank">Justin Thaler's book</a> (Chapter 3.5). Here's a quick recap:
+
+<br>
+A multivariate polynomial $g$ is multilinear if the degree of the polynomial in each variable is at most one.
+
+<br>
+Any function $f: \{0,1\}^n \longrightarrow \mathbb{F}$ has a unique multilinear extension (MLE) over $\mathbb{F}$, denoted $F$. That is, $F$ is the unique multilinear polynomial over $\mathbb F$ satisfying
+
+$$F(x_1, \ldots, x_n) = f(x_1, \ldots, x_n) ~~\forall~ (x_1, \ldots, x_n) \in \{0,1\}^n$$
+
+<br>
+For each Boolean vector $b=(b_1, \ldots, b_n) \in \{0,1\}^n$, we define the basis polynomial
+
+$$
+\chi_b(X_1,\ldots,X_n)
+= \prod_{i=1}^{n}
+\begin{cases}
+X_i, & b_i = 1,\\
+1-X_i, & b_i = 0.
+\end{cases}
+$$
+
+This polynomial is interesting because $\chi_b(x) =
+\begin{cases}
+1 & x=b\\
+0 & x \neq b
+\end{cases}
+~~\forall~ x \in \{0,1\}^n
+$
+
+<br>
+Then, the MLE can be obtained as
+
+$$F(X) = \sum_{b \in \{0,1\}^n} f(b) \cdot \chi_b(X)$$
+
+The key idea here, is that the MLE and the original function agree at the same values when evaluated at any value of the <i>Boolean hypercube</i> (fancy way to say all possible values of $\{0,1\}^n$), and outside the Boolean hypercube the original function is undefined but it's MLE has a well-defined value.
+
+<br>
+Notation: usually the MLE is denoted as $\tilde{f}(X)$, but here I've followed Aerie's notation $F(X)$.
+
+</blockquote>
+
+<p>In Aerie, since we&rsquo;re batching many Falcon signatures, we&rsquo;re not working on the original equation</p>
+<p><span class="math display">\[s_1 + h \cdot s_2 \equiv c \pmod {q,~ X^n +1}\]</span></p><p>(one for each signature), but encoding all the signatures values into batched multilinear extensions (MLEs). This is obtained by computing the MLEs of the Falcon polynomials we&rsquo;re batching:</p>
+<p><span class="math display">\[S_1(j, i) = s_{1,i,j} \pmod p;
+~~~~~~~~~~~~H(j, i) = ctr_q (h_i)_j \pmod p\]</span></p><p><span class="math display">\[S_2(j, i) = s_{2,i,j} \pmod p;
+~~~~~~~~~~~~C(j, i) = ctr_q (c_i)_j \pmod p\]</span></p>
+<blockquote>
+<p><span style="font-size:85%">
+Here <span class="math inline">\(p= 2^{64} - 59\)</span>, which is Aerie&rsquo;s field modulus, and <span class="math inline">\(ctr_q(\cdot)\)</span> returns the centered integer representative modulo <span class="math inline">\(q\)</span>, defined as</p>
+<p><span class="math display">\[ctr_q: \mathbb F_q \longrightarrow \mathbb Z, ~ \text{such that}\]</span></p><p><span class="math display">\[ctr_q(a) \equiv a \pmod q, ~~ -\frac{q}{2} &lt; ctr_q(a) &lt; \frac{q}{2}\]</span></p><p></span></p>
+</blockquote>
+
+<p>Each MLE (<span class="math inline">\(S_1, S_2, H, C\)</span>) is a batched MLE which encodes the values of the various original Falcon values. You can imagine each <span class="math inline">\(S_1\)</span> encoding a table where each column has a signature associated and encodes the coefficients of the signature of that column, ie.</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th><span class="math inline">\(i=0\)</span></th>
+<th><span class="math inline">\(1\)</span></th>
+<th><span class="math inline">\(\ldots\)</span></th>
+<th><span class="math inline">\(N-1\)</span></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><span class="math inline">\(j=0\)</span></td>
+<td><span class="math inline">\(S_1(0,0)\)</span></td>
+<td><span class="math inline">\(S_1(0,1)\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(S_1(0,N-1)\)</span></td>
+</tr>
+
+<tr>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(S_1(1,0)\)</span></td>
+<td><span class="math inline">\(S_1(1,1)\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(S_1(1,N-1)\)</span></td>
+</tr>
+
+<tr>
+<td><span class="math inline">\(\vdots\)</span></td>
+<td><span class="math inline">\(\vdots\)</span></td>
+<td><span class="math inline">\(\vdots\)</span></td>
+<td><span class="math inline">\(\ddots\)</span></td>
+<td><span class="math inline">\(\vdots\)</span></td>
+</tr>
+
+<tr>
+<td><span class="math inline">\(n-1\)</span></td>
+<td><span class="math inline">\(S_1(n-1,0)\)</span></td>
+<td><span class="math inline">\(S_1(n-1,1)\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(S_1(n-1,N-1)\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>For <span class="math inline">\(N\)</span> batched signatures, each original polynomial with <span class="math inline">\(n\)</span> coefficients. And similarly for <span class="math inline">\(S_2(j,i), H(j,i), C(j,i)\)</span>.</p>
+
+<blockquote>
+<div style="font-size:85%;">
+Also, recall that the MLEs, while they preserve the original function's outputs when evaluated at the boolean hypercube, they do not preserve the polynomial multiplication; that is, $MLE(h \cdot s_2) \neq MLE(h) \cdot MLE(s_2)$.
+<br><br>
+In Falcon, we're operating inside the polynomial ring $\mathbb{F}_q[X]/(X^n +1)$, where multiplication means computing the negacyclic convolution, which is equivalent to doing ordinary polynomial multiplication and then reducing modulo $X^n +1$. In Aerie's paper, they use the operator symbol $\circledast$ for when performing negacyclic convolution on their Boolean-domain coefficent vectors, to denote clearly the negacyclic convolution of the coefficient vectors rather than ordinary multiplication of the MLEs.
+</div>
+</blockquote>
+
+<p>Then, from the batch equation of the Falcon signatures verification,</p>
+
+<!-- $$S_1(j,i) + H(j,i) \circledast S_2(j,i) \equiv C(j,i) \pmod{q, X^n+1}$$ -->
+
+<p>Aerie defines the <em>virtual residual</em> <span class="math inline">\(\Delta\)</span> as the batched MLE which when evaluated at the boolean hypercube matches the original Falcon residual coefficients modulo <span class="math inline">\(p\)</span>,</p>
+<p><span class="math display">\[\Delta(\cdot, i) = S_1(\cdot, i) + H(\cdot, i) \circledast S_2(\cdot, i) - C(\cdot, i), ~~~~\text{over}~ \mathbb{F}_p\]</span></p>
+<blockquote>
+<div style="font-size:85%">
+Notation: here the paper uses the $(\cdot, i)$ notation, which indicates that the Falcon signature index $i$ is fixed, while the coefficient $j$ ranges over $\{ 0, \ldots, n-1 \}$, so that $S_1(\cdot, i)$ denotes the vector of coefficients belonging to signature $i$:
+
+$$S_1(\cdot, i) = ( S_1(0,i),~ S_1(1,i),~ \ldots, S_1(n-1, i) )$$
+So, while $S_1(j, i)$ refers to one coefficient, $S_1(\cdot, i)$ refers to all coefficients for the signature $i$. therefore $S_1(\cdot, i)$ is a vector of length $n$.
+
+</div>
+</blockquote>
+
+<p>For the Falcon check, we need to check divisibility by <span class="math inline">\(q\)</span> over the integers, but in Aerie we&rsquo;re operating <span class="math inline">\(\Delta\)</span> over <span class="math inline">\(\mathbb{F}_p\)</span>. Since <span class="math inline">\(q \nmid p\)</span>, reducing an integer modulo <span class="math inline">\(p\)</span> could change its divisibility by <span class="math inline">\(q\)</span>, so what Aerie does is to introduce the <em>integer interpretation of the residual</em>, <span class="math inline">\(\Delta^{(\mathbb Z)}\)</span>, and we want to establish <span class="math inline">\(ctr_p(\Delta)=\Delta^{(\mathbb Z)}\)</span>.</p>
+
+<p>The paper defines <span class="math inline">\(\Delta^{(\mathbb Z)}\)</span> as</p>
+<p><span class="math display">\[\Delta^{(\mathbb{Z})} = ctr_p(S_1) + H \circledast S_2 - C\]</span></p><p>where the operations are over <span class="math inline">\(\mathbb Z\)</span>. Here we use <span class="math inline">\(ctr_p(S_1)\)</span> to interpret the committed field elements of <span class="math inline">\(S_1\)</span> as signed integers, while <span class="math inline">\(H, S_2, C\)</span> are already in their bounded integer representatives (bounded in <span class="math inline">\((-p/2, p/2)\)</span>).</p>
+
+<p>With this, we have that <span class="math inline">\(\Delta^{(\mathbb{Z})}\pmod p = \Delta\)</span> coefficientwise on the Boolean domain, but this does not imply
+<span class="math inline">\(\operatorname{ctr}_p\Delta=\Delta^{(\mathbb Z)}\)</span>.</p>
+
+<p>To ensure the equality, we need to ensure the integer residual (<span class="math inline">\(\Delta^{(\mathbb Z)}\)</span>) does not wrap around modulo <span class="math inline">\(p\)</span>, which is guaranteed by the bound <span class="math inline">\(| \Delta^{(\mathbb{Z})} (j, i) | &lt; p/2\)</span>, so that we can recover the original integer value by the centered reduction, <span class="math inline">\(ctr_p(\cdot)\)</span>, implying <span class="math inline">\(ctr_p(\Delta)=\Delta^{(\mathbb Z)}\)</span>. This bound is not checked coefficientwise but instead is derived indirectly through bounding <span class="math inline">\(S_1, S_2, e\)</span> (while <span class="math inline">\(H, C\)</span> are publicly bounded), using the <strong>triangle inequality</strong> and <strong>Cauchy-Schwarz inequality</strong>.</p>
+
+<blockquote>
+<div style="font-size:85%">
+<i>I learned the following Proposition and Corollary from <a href="https://sites.google.com/view/matanprasmashomepage/notes" target="_blank">Matan Prasma</a>'s notes on Lattices (<a href="https://drive.google.com/file/d/1Z0Nh6u1hxdpdddgixJgEWjvZZ7OPHIFf/view" target="_blank">link</a>).</i>
+<br><br>
+<b>Proposition (Cauchy-Schwarz inequality):</b><br>
+
+$$\text{for}~~ v, w \in \mathbb R^n,~ |\langle v, w \rangle| \leq ||v|| \cdot ||w||$$
+
+<br>
+<i>Proof:</i><br>
+If either $v$ or $w$ is $0$, then it is trivial.
+<br>
+Set $a=- \langle v,w \rangle,~ b=\langle v,v \rangle =||v||^2$.
+<br>
+Then,
+
+$$0 \leq \langle av + bw, av+bw \rangle$$
+$$=\langle av, av \rangle + \langle av, bw \rangle + \langle bw, av \rangle + \langle bw, bw \rangle$$
+$$=a^2 \underbrace{\langle v, v \rangle}_{||v||^2} + ab \underbrace{\langle v, w \rangle}_{-a} + ab \underbrace{\langle w, v \rangle}_{-a} + b^2 \underbrace{\langle w, w \rangle}_{||w||^2}$$
+$$= a^2 \underbrace{||v||^2}_{b} - aba -aba + b^2 ||w||^2$$
+$$=\underbrace{a^2b - a^2b}_{0} - a^2 b + b^2 ||w||^2$$
+$$=-a^2b + b^2 ||w||^2$$
+$$=b (-a^2 + b ||w||^2)$$
+
+Since $v \neq 0$, we know that $b > 0$, so that
+
+$$0 \leq -a^2 + b ||w||^2$$
+
+which means that $~~| \langle v, w \rangle | \leq ||v|| \cdot ||w||~~$
+as desired. $\quad\quad\quad\square$
+
+<br><br>
+
+<b>Corollary (Triangle inequality):</b><br>
+
+$$\forall~ v,w \in \mathbb R^n,~ ||v+w|| \leq ||v|| + ||w||$$
+
+<br>
+<i>Proof:</i><br>
+
+$$||v + w||^2 = \langle v+w, v+w \rangle$$
+$$=\langle v, v \rangle + 2 \langle v,w \rangle + \langle w,w \rangle$$
+$$=||v||^2 + 2 \langle v,w \rangle + ||w||^2 \leq ||v||^2 + 2 ||v|| \cdot ||w|| + ||w||^2$$
+
+(notice that the $\leq$ is applied using the Cauchy-Schwarz inequality)<br>
+
+$$ =(||v|| + ||w||)^2$$
+
+Therefore,
+
+$$||v+w|| \leq ||v|| + ||w||$$
+
+<div style="float:right">$\square$</div>
+
+<p><br>
+Geometric interpretation: the length of each side of a triangle is less than the sum of the lengths of the other two sides.
+</div></p>
+</blockquote>
+
+<p>In Aerie, the <em>Triangle inequality</em> and <em>Cauchy-Schwarz</em> are applied as follows:</p>
+
+<p>We have <span class="math inline">\(\Delta^{(\mathbb Z)} = ctr_p(S_1) + H \circledast S_2 -C\)</span>, so, applying the triangle inequality:</p>
+<p><span class="math display">\[|\Delta^{\mathbb Z}(j,i)| \leq |ctr_p(S_1(j,i))| +|(H(\cdot,i)\circledast S_2(\cdot,i))_j| +|C(j,i)|\]</span></p>
+<blockquote>
+<div style="font-size:85%;">
+Notice that here we're first computing the convolution of the two vectors $H(\cdot, i),~ S_2(\cdot,i)$, ie. $(H(\cdot,i)\circledast S_2(\cdot,i))$, and then selecting the coefficient $j$.
+</div>
+</blockquote>
+
+<p>and then the Cauchy-Schwarz:</p>
+<p><span class="math display">\[|(H(\cdot, i) \circledast S_2(\cdot, i))_j| \leq \|H(\cdot, i) \|_2 \cdot \|S_2(\cdot, i) \|_2\]</span></p><p>Thus</p>
+<p><span class="math display">\[|\Delta^{(\mathbb Z)}(j,i)| \leq |ctr_p(S_1(j,i))| + \| H(\cdot,i) \| \cdot \| S_2(\cdot,i) \| +|C(j,i)|\]</span></p>
+<blockquote>
+<div style="font-size:85%;">
+Here notice that we're taking the absolute values ($| \ldots |$) for $\Delta^{(\mathbb Z)},~ ctr_p(S_1),~ C$ coefficients, but the Euclidean norm ($\| \ldots \|$) for $H$ and $S_2$ vectors. This is because we're taking the individual scalar coefficients of the first three (hence the $(j,i)$ notation), while $H$ and $S_2$ are vectors (hence the $(\cdot,i)$ notation as mentioned earlier).
+</div>
+</blockquote>
+
+<p>And at Aerie&rsquo;s Lemma A.6, it is proven that <span class="math inline">\(|ctr_p(S_1(j,i))| + \|H(\cdot,i)\| \cdot \|S_2(\cdot, i)\| +|C(j,i)| &lt; p/2\)</span>, therefore we have that</p>
+<p><span class="math display">\[|\Delta^{(\mathbb Z)}(j,i)| &lt; p/2\]</span></p><p>In this way, we can express the bound on each coefficient of <span class="math inline">\(\Delta^{(\mathbb Z)}\)</span> using the known bounds on <span class="math inline">\(S_1, S_2, H, C\)</span>.
+This bound is proven indirectly through the <em>randomized norm projection</em>, which probabilistically bounds <span class="math inline">\(S_1\)</span> and <span class="math inline">\(e\)</span>. Combined with the coefficient bounds on <span class="math inline">\(S_2\)</span> and the algebraic norm equation, this establishes the integer norm bounds needed to derive the residual bound.</p>
+
+<blockquote>
+<p>Isn&rsquo;t great when you can apply Propositions and Corollaries you learned in the past to applied cases? I love the feeling.</p>
+</blockquote>
+
+<p>With the bounds in place, we have <span class="math inline">\(ctr_p(\Delta)=\Delta^{(\mathbb Z)}\)</span>, and then the original Falcon relation is equivalent to</p>
+<p><span class="math display">\[\Delta^{(\mathbb{Z})} \equiv 0 \pmod q\]</span></p><p>To do this last check, Aerie uses the randomized <em>residual projection</em> technique.</p>
+
+<h3>Randomized residual projection</h3>
+
+<p>Now that we&rsquo;ve established <span class="math inline">\(\operatorname{ctr}_p\Delta=\Delta^{(\mathbb Z)}\)</span>, we want to prove <span class="math inline">\(\Delta^{(\mathbb Z)} \equiv 0 \pmod q\)</span>, which means that every coefficient of <span class="math inline">\(\Delta^{(\mathbb Z)}\)</span> is divisible by <span class="math inline">\(q\)</span>. <span class="math inline">\(\Delta^{(\mathbb Z)}\)</span> has <span class="math inline">\(nN^*\)</span> coefficients (<span class="math inline">\(N\)</span> signatures batched, <span class="math inline">\(N^*\)</span> padded signatures, each with <span class="math inline">\(n\)</span> coefficients); but we want to do it without checking all <span class="math inline">\(nN^*\)</span> coefficients individually.</p>
+
+<blockquote>
+<div style="font-size:85%">
+Here $N$ is the number of Falcon signatures being aggregated, and $N^*= max(2^{\lceil log_2 N \rceil}, 4096/n)$ is the next power of two of $N$ with a minimum padded size of $4096/n$.
+</div>
+</blockquote>
+
+<p>Aerie uses a randomized linear projection <span class="math inline">\(\Pi_{res}\)</span>, which takes the <span class="math inline">\(nN^*\)</span> evaluations of the batched MLE <span class="math inline">\(\Delta\)</span> and compresses them into just 31 field elements:</p>
+<p><span class="math display">\[\Pi_{res}: \mathbb{F}_p^{nN^*} \longrightarrow \mathbb{F}_p^{31}\]</span></p>
+<div style="text-align: center;margin:25px;">
+<img src="img/posts/aerie/residual-projection.png" style="max-width:70%;" />
+ <br><i style="font-size:80%;">Diagram from Aerie paper <a href="https://github.com/a16z/aerie/blob/main/paper/aerie.pdf" target="_blank">https://github.com/a16z/aerie/blob/main/paper/aerie.pdf</a></i>
+</div>
+
+<p>The prover computes <span class="math inline">\(y_{res}=\Pi_{res}(\Delta)\in\mathbb F_p^{31}\)</span>, where each output value is a random linear combination</p>
+<p><span class="math display">\[y_{res,o} = \sum_{j,i} w_{o,j,i} \Delta(j,i) \pmod p\]</span></p><p>where the weights <span class="math inline">\(w_{o,j,i}\)</span> are determined by three successive layers of random matrices derived from a random seed chosen by the verifier after the prover commits to the witnes, so that the witness can not be chosen to exploit the projection.</p>
+
+<p><span class="math inline">\(\Longrightarrow\)</span> If every coefficient of <span class="math inline">\(\Delta^{(\mathbb Z)}\)</span> is divisible by <span class="math inline">\(q\)</span>, then any integer linear combination of its coefficients is also divisible by <span class="math inline">\(q\)</span>.
+<!-- Conversely, if at least one coefficient is not divisible by $q$,the random linear combinations are unlikely to be divisible by $q$. Since we use 31 output rows, and 25 possible random coefficients (their values range from -12 to 12), the probability is $25^{-31}$; which across three layers used by Aerie, the probability is at most $3 \cdot 25^{-31}$.--></p>
+
+<p>Thus, the verifier checks the centered integer representatives of the 31 projected values:</p>
+<p><span class="math display">\[q\mid\operatorname{ctr}_p(y_{res,o}),~~~~ \forall\,o&lt;31\]</span></p><p>There is one subtlety: the projection operates over <span class="math inline">\(\mathbb F_p\)</span>, so its results might wrap around modulo <span class="math inline">\(p\)</span>, potentially changing their divisibility by <span class="math inline">\(q\)</span>. Aerie bounds this probability, together with the probability that the random combinations fail to detect an invalid residual.</p>
+
+<p>Finally, since the verifier doesn&rsquo;t know <span class="math inline">\(\Delta\)</span>, Aerie uses SumCheck (+ Akita PCS) to prove that the 31 projected values were correctly computed from the committed witness. Thus, the randomized projection checks <strong>divisibility</strong>, while SumCheck checks <strong>consistency with the witness</strong>.</p>
+
+<h3>Wrapup</h3>
+
+<p>When I first saw Aerie&rsquo;s <a href="https://x.com/SuccinctJT/status/2111136119593082925">announcement</a> I was interested to see how they managed to batch efficiently the Falcon verifications, since as mentioned at the beginning of this post, in the past I worked on the Falcon verification inside zk circuits (plonky2). The paper turned out to be a pleasant read, making usage of proofs I&rsquo;ve studied in the past (ie. Cauchy-Schwarz inequality) which is also a nice feeling, and improving on the projections I saw some months ago in the LaBRADOR scheme.</p>
+
+<p>I&rsquo;m still following in parallel all the hash-based schemes development, specially now that Ethereum ecosystem is doubling down on them (at least for the validators signatures). But while hash-based signatures are considered by part of the community (not everybody) the safest path, they are also a bit more &lsquo;boring&rsquo; (without any aim to underestimate them); I find more interesting to study the lattice-based ones which have much more interesting mathematical objects behind them to dive into.</p>
+
+    </div>
+
+    <footer style="text-align:center; margin-top:100px;margin-bottom:50px;">
+      <div class="container">
+        <br>
+        <a href="/blog">Go to main</a>
+        <br><br>
+        <div class="row">
+          <ul class="list-inline">
+            <li><a href="https://twitter.com/arnaucube"
+                   style="color:gray;text-decoration:none;"
+                   target="_blank">twitter.com/arnaucube</a>
+            </li>
+            <li><a href="https://github.com/arnaucube"
+                   style="color:gray;text-decoration:none;"
+                   target="_blank">github.com/arnaucube</a>
+            </li>
+          </ul>
+        </div>
+        <div class="row" style="display:inline-block;">
+          Blog made with <a href="http://github.com/arnaucube/blogo/"
+                            target="_blank" style="color: gray;text-decoration:none;">Blogo</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+    </script>
+    <script src="js/external-links.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script defer src="js/katex/katex.min.js"></script>
+    <script defer src="js/katex/auto-render.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          displayMode: false,
+          // customised options
+          // • auto-render specific keys, e.g.:
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "\\(", right: "\\)", display: false},
+            {left: "\\begin{equation}", right: "\\end{equation}", display: true}
+          ],
+          // • rendering keys, e.g.:
+          throwOnError : true
+        });
+      });
+
+      ///
+      let theme = localStorage.getItem("theme");
+      if ((theme === "light-theme")||(theme==null)) {
+          theme = "light-theme";
+          document.getElementById("themeSwitcher").checked = false;
+      } else if (theme === "dark-theme") {
+          theme = "dark-theme";
+          document.getElementById("themeSwitcher").checked = true;
+      }
+      document.body.className = theme;
+      localStorage.setItem("theme", theme);
+
+      function switchTheme() {
+        theme = localStorage.getItem("theme");
+        if (theme === "light-theme") {
+          theme = "dark-theme";
+          document.getElementById("themeSwitcher").checked = true;
+        } else {
+          theme = "light-theme";
+          document.getElementById("themeSwitcher").checked = false;
+        }
+        document.body.className = theme;
+        localStorage.setItem("theme", theme);
+
+        console.log(theme);
+      }
+    </script>
+    <script>
+    function tagLinks(tagName) {
+      var tags = document.getElementsByTagName(tagName);
+      for (var i=0, hElem; hElem =  tags[i]; i++) {
+        if (hElem.parentNode.className=="row postThumb") {
+          continue;
+        }
+        hElem.id = hElem.innerHTML.toLowerCase().replace(" ", "-");
+        hElem.innerHTML = "<a href='#"+hElem.id+"'>"+hElem.innerHTML+"</a>";
+      }
+    }
+    tagLinks("h2");
+    tagLinks("h3");
+    tagLinks("h4");
+    tagLinks("h5");
+    </script>
+    <script>
+function generateTOC(tocContainerId = "toc") {
+    const tocContainer = document.getElementById(tocContainerId);
+    if (!tocContainer) return;
+
+    const headings = document.querySelectorAll("h2, h3, h4, h5, h6");
+    if (!headings.length) return;
+
+    // Generate IDs if missing
+    headings.forEach((heading, index) => {
+        if (!heading.id) {
+            heading.id =
+                heading.textContent
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^\w\s-]/g, "")
+                    .replace(/\s+/g, "-") +
+                "-" +
+                index;
+        }
+    });
+
+    const toc = document.createElement("ul");
+    let currentLevel = 1;
+    let currentList = toc;
+    const stack = [toc];
+
+    headings.forEach((heading) => {
+        const level = parseInt(heading.tagName.substring(1), 10);
+
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+
+        a.href = "#" + heading.id;
+        a.textContent = heading.textContent;
+
+        li.appendChild(a);
+
+        if (level > currentLevel) {
+            for (let i = currentLevel; i < level; i++) {
+                const nestedList = document.createElement("ul");
+
+                const lastLi =
+                    currentList.lastElementChild ||
+                    currentList.appendChild(document.createElement("ul"));
+
+                lastLi.appendChild(nestedList);
+
+                stack.push(nestedList);
+                currentList = nestedList;
+            }
+        } else if (level < currentLevel) {
+            for (let i = currentLevel; i > level; i--) {
+                stack.pop();
+            }
+            currentList = stack[stack.length - 1];
+        }
+
+        currentList.appendChild(li);
+        currentLevel = level;
+    });
+
+    tocContainer.innerHTML = "";
+    tocContainer.appendChild(toc);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    generateTOC();
+});
+    </script>
+    <script src="js/mermaid.min.js"></script>
+
+  </body>
+</html>
+
