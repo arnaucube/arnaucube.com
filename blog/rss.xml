@@ -27,10 +27,10 @@
     </item>
     <item>
       <title>Notes on hash-based signatures (pdf)</title>
-      <link>https://raw.githubusercontent.com/arnaucube/math/master/notes_hash-based-signatures.pdf</link>
+      <link>https://github.com/arnaucube/math/blob/master/notes_hash-based-signatures.pdf</link>
       <description>This document contains notes on hash-based signatures (WOTS+, HORST, SPHINCS, XMSS)</description>
       <pubDate>Sat, 27 Dec 2025 00:00:00 +0000</pubDate>
-      <guid isPermaLink="true">https://raw.githubusercontent.com/arnaucube/math/master/notes_hash-based-signatures.pdf</guid>
+      <guid isPermaLink="true">https://github.com/arnaucube/math/blob/master/notes_hash-based-signatures.pdf</guid>
     </item>
     <item>
       <title>Human connections in the early days of AI</title>
@@ -55,10 +55,10 @@
     </item>
     <item>
       <title>Notes on HyperNova (pdf)</title>
-      <link>https://raw.githubusercontent.com/arnaucube/math/master/notes_hypernova.pdf</link>
+      <link>https://github.com/arnaucube/math/blob/master/notes_hypernova.pdf</link>
       <description>This document contains notes on HyperNova.</description>
       <pubDate>Tue, 16 May 2023 00:00:00 +0000</pubDate>
-      <guid isPermaLink="true">https://raw.githubusercontent.com/arnaucube/math/master/notes_hypernova.pdf</guid>
+      <guid isPermaLink="true">https://github.com/arnaucube/math/blob/master/notes_hypernova.pdf</guid>
     </item>
     <item>
       <title>IPA polynomial commitment by hand</title>
@@ -69,10 +69,10 @@
     </item>
     <item>
       <title>Notes on FRI and STIR (pdf)</title>
-      <link>https://raw.githubusercontent.com/arnaucube/math/master/notes_fri_stir.pdf</link>
+      <link>https://github.com/arnaucube/math/blob/master/notes_fri_stir.pdf</link>
       <description>This document contains notes on FRI low degree testing and the trick to convert it to a polynomial commitment scheme.</description>
       <pubDate>Sun, 26 Feb 2023 00:00:00 +0000</pubDate>
-      <guid isPermaLink="true">https://raw.githubusercontent.com/arnaucube/math/master/notes_fri_stir.pdf</guid>
+      <guid isPermaLink="true">https://github.com/arnaucube/math/blob/master/notes_fri_stir.pdf</guid>
     </item>
     <item>
       <title>Implementing the powers of tau contributor</title>
